@@ -25,6 +25,48 @@ function SideMenu() {
                 <div className="flex items-center gap-2">
                   <img
                     alt="inventory-icon"
+                    src={require("../assets/supplier-icon.png")}
+                  />
+                  <span className="text-sm font-medium"> Client </span>
+                </div>
+              </Link>
+            </summary>
+          </details>
+
+          <details className="group [&_summary::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+              <Link to="/inventory">
+                <div className="flex items-center gap-2">
+                  <img
+                    alt="inventory-icon"
+                    src={require("../assets/supplier-icon.png")}
+                  />
+                  <span className="text-sm font-medium"> Calendar </span>
+                </div>
+              </Link>
+            </summary>
+          </details>
+
+          <details className="group [&_summary::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+              <Link to="/inventory">
+                <div className="flex items-center gap-2">
+                  <img
+                    alt="inventory-icon"
+                    src={require("../assets/supplier-icon.png")}
+                  />
+                  <span className="text-sm font-medium"> Collections </span>
+                </div>
+              </Link>
+            </summary>
+          </details>
+
+          <details className="group [&_summary::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+              <Link to="/inventory">
+                <div className="flex items-center gap-2">
+                  <img
+                    alt="inventory-icon"
                     src={require("../assets/inventory-icon.png")}
                   />
                   <span className="text-sm font-medium"> Inventory </span>
@@ -33,7 +75,147 @@ function SideMenu() {
             </summary>
           </details>
 
-          <Link
+          <details className="group [&_summary::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+              <Link to="/user-register">
+                <div className="flex items-center gap-2">
+                  <img
+                    alt="inventory-icon"
+                    src={require("../assets/supplier-icon.png")}
+                  />
+                  <span className="text-sm font-medium"> Users </span>
+                </div>
+              </Link>
+            </summary>
+          </details>
+
+          <details className="group [&_summary::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+              <div className="flex items-center gap-2">
+                <img
+                  alt="inventory-icon"
+                  src={require("../assets/inventory-icon.png")}
+                />
+                <span className="text-sm font-medium"> Settings </span>
+              </div>
+            </summary>
+            <nav className="ml-4 mt-2 flex flex-col space-y-1">
+              <Link
+                to="/menu1"
+                className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-sm font-medium">Devices</span>
+              </Link>
+              <Link
+                to="/menu2"
+                className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-sm font-medium">Make</span>
+              </Link>
+              <Link
+                to="/menu2"
+                className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-sm font-medium">Recovered Material</span>
+              </Link>
+              <Link
+                to="/menu2"
+                className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-sm font-medium">Unrecovered Material</span>
+              </Link>
+              <Link
+                to="/menu2"
+                className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-sm font-medium">Model</span>
+              </Link>
+              <Link
+                to="/menu2"
+                className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-sm font-medium">Operating System</span>
+              </Link>
+              <Link
+                to="/menu2"
+                className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-sm font-medium">Grade</span>
+              </Link>
+              <Link
+                to="/menu2"
+                className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-sm font-medium">Condition</span>
+              </Link>
+              <Link
+                to="/menu2"
+                className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-sm font-medium">Current Loaction</span>
+              </Link>
+            </nav>
+          </details>
+
+          <details className="group [&_summary::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+              <div className="flex items-center gap-2">
+                <img
+                  alt="inventory-icon"
+                  src={require("../assets/inventory-icon.png")}
+                />
+                <span className="text-sm font-medium"> Certificates </span>
+              </div>
+            </summary>
+            <nav className="ml-4 mt-2 flex flex-col space-y-1">
+              <Link
+                to="/menu1"
+                className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-sm font-medium">View Certificates</span>
+              </Link>
+              <Link
+                to="/menu2"
+                className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-sm font-medium">Generate Certificates</span>
+              </Link>
+              <Link
+                to="/menu2"
+                className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-sm font-medium">Manage Certificates</span>
+              </Link>
+            </nav>
+          </details>
+
+          <details className="group [&_summary::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
+              <div className="flex items-center gap-2">
+                <img
+                  alt="inventory-icon"
+                  src={require("../assets/inventory-icon.png")}
+                />
+                <span className="text-sm font-medium"> Report </span>
+              </div>
+            </summary>
+            <nav className="ml-4 mt-2 flex flex-col space-y-1">
+              <Link
+                to="/menu1"
+                className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-sm font-medium">Client Report</span>
+              </Link>
+              <Link
+                to="/menu2"
+                className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-sm font-medium">Weight Report</span>
+              </Link>
+            </nav>
+          </details>
+
+          {/* <Link
             to="/purchase-details"
             className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
           >
@@ -49,9 +231,9 @@ function SideMenu() {
           >
             <img alt="sale-icon" src={require("../assets/supplier-icon.png")} />
             <span className="text-sm font-medium"> Sales</span>
-          </Link>
+          </Link> */}
 
-          <details className="group [&_summary::-webkit-details-marker]:hidden">
+          {/* <details className="group [&_summary::-webkit-details-marker]:hidden">
             <summary className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700">
               <Link to="/manage-store">
                 <div className="flex items-center gap-2">
@@ -63,7 +245,7 @@ function SideMenu() {
                 </div>
               </Link>
             </summary>
-          </details>
+          </details> */}
         </nav>
       </div>
 
