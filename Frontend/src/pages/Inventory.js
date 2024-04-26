@@ -228,9 +228,9 @@ function Inventory() {
                 <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
                 Collection Date
                 </th>
-                <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
+                {/* <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
                 Collection Image
-                </th>
+                </th> */}
                 <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
                 Client Name
                 </th>
@@ -253,9 +253,9 @@ function Inventory() {
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                      {element.manufacturer}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                    {/* <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                       
-                    </td>
+                    </td> */}
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                     {element.client}
                     </td>
