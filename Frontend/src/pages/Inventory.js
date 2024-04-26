@@ -190,7 +190,7 @@ function Inventory() {
         <div className="overflow-x-auto rounded-lg border bg-white border-gray-200 ">
           <div className="flex justify-between pt-5 pb-3 px-3">
             <div className="flex gap-4 justify-center items-center ">
-              <span className="font-bold">Products</span>
+              <span className="font-bold">Collections</span>
               <div className="flex justify-center items-center px-2 border-2 rounded-md ">
                 <img
                   alt="search-icon"
@@ -212,7 +212,7 @@ function Inventory() {
                 onClick={addProductModalSetting}
               >
                 {/* <Link to="/inventory/add-product">Add Product</Link> */}
-                Add Product
+                Add Collections
               </button>
             </div>
           </div>
@@ -220,19 +220,19 @@ function Inventory() {
             <thead>
               <tr>
                 <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
-                  Products
+                Collections
                 </th>
                 <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
-                  Manufacturer
+                Collection Name
                 </th>
                 <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
-                  Stock
+                Collection Date
                 </th>
                 <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
-                  Description
+                Collection Image
                 </th>
                 <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
-                  Availibility
+                Client Name
                 </th>
                 <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
                   More
@@ -245,19 +245,19 @@ function Inventory() {
                 return (
                   <tr key={element._id}>
                     <td className="whitespace-nowrap px-4 py-2  text-gray-900">
-                      {element.name}
+                      {element.userID}
                     </td>
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      {element.manufacturer}
+                    {element.name} 
                     </td>
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      {element.stock}
+                     {element.manufacturer}
                     </td>
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      {element.description}
+                      
                     </td>
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      {element.stock > 0 ? "In Stock" : "Not in Stock"}
+                    {element.client}
                     </td>
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                       <span

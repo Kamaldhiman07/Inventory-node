@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import Store from "./pages/Store";
 import Sales from "./pages/Sales";
 import PurchaseDetails from "./pages/PurchaseDetails";
+import Devices from "./pages/Devices";
 import UserRegistration from './pages/UserRegistration';
 
 const App = () => {
@@ -79,6 +80,7 @@ const App = () => {
             <Route path="/sales" element={<Sales />} />
             <Route path="/manage-store" element={<Store />} />
             <Route path="/user-register" element={<UserRegistration />} />
+            <Route path="/device" element={<Devices />} />
           </Route>
           <Route path="*" element={<NoPageFound />} />
         </Routes>

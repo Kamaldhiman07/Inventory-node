@@ -19,6 +19,14 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    client: {
+      type: String,
+      required: false,
+    },
+    collected_by: {
+      type: String,
+      required: false,
+    },
     description: String,
   },
   { timestamps: true }

@@ -6,12 +6,14 @@ export default function UpdateProduct({
   updateProductData,
   updateModalSetting,
 }) {
-  const { _id, name, manufacturer, description } = updateProductData;
+  const { _id, name, manufacturer, description,client,collected_by } = updateProductData;
   const [product, setProduct] = useState({
     productID: _id,
     name: name,
     manufacturer: manufacturer,
     description: description,
+    client: client,
+    collected_by: collected_by,
   });
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
@@ -124,6 +126,49 @@ export default function UpdateProduct({
                               placeholder="Ex. Apple"
                             />
                           </div>
+
+                          <div>
+                            <label
+                              htmlFor="client"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            >
+                              Manufacturer
+                            </label>
+                            <input
+                              type="text"
+                              name="client"
+                              id="client"
+                              value={product.client}
+                              onChange={(e) =>
+                                handleInputChange(e.target.name, e.target.value)
+                              }
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                              placeholder="Ex. Apple"
+                            />
+                          </div>
+                          <div>
+                            <label
+                              htmlFor="collected_by"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            >
+                              Collected by
+                            </label>
+                            <input
+                              type="text"
+                              name="collected_by"
+                              id="collected_by"
+                              value={product.collected_by}
+                              onChange={(e) =>
+                                handleInputChange(e.target.name, e.target.value)
+                              }
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                              placeholder="Ex. Apple"
+                            />
+                          </div>
+
+
+
+
                           <div className="sm:col-span-2">
                             <label
                               htmlFor="description"
