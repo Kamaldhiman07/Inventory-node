@@ -18,22 +18,40 @@ function Inventory() {
   }, [updatePage]);
 
   const fetchClientsData = () => {
-    fetch(`http://localhost:4000/api/clients/${authContext.user}`)
-      .then((response) => response.json())
+    fetch(`http://localhost:4000/api/getAll`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId: authContext.user }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then((data) => {
         setAllClients(data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error('Error fetching clients:', err));
   };
+  
 
-  const fetchSearchData = () => {
-    fetch(`http://localhost:4000/api/clients/search?searchTerm=${searchTerm}`)
-      .then((response) => response.json())
+  const fetchSearchData = (searchTerm) => {
+    fetch(`http://localhost:4000/api/searchUser?searchTerm=${searchTerm}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then((data) => {
         setAllClients(data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error('Error fetching search data:', err));
   };
+  
 
   const addClientModalSetting = () => {
     setShowClientModal(!showClientModal);

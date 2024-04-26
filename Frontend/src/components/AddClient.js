@@ -18,6 +18,7 @@ export default function AddClient({
     phone: "",
     password: "",
   });
+
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
 
@@ -25,8 +26,9 @@ export default function AddClient({
     setClient({ ...client, [key]: value });
   };
 
+  // console.log(client);
   const addClient = () => {
-    fetch("http://localhost:4000/api/clients/add", {
+    fetch("http://localhost:4000/api/client/add", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -34,7 +36,8 @@ export default function AddClient({
       body: JSON.stringify(client),
     })
       .then((result) => {
-        alert("Client ADDED");
+        console.log(result);
+        alert("Client Added");
         handlePageUpdate();
         addClientModalSetting();
       })
@@ -111,6 +114,7 @@ export default function AddClient({
                               }
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               placeholder="Client Name"
+                              required
                             />
                           </div>
                           <div>
@@ -130,6 +134,7 @@ export default function AddClient({
                               }
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               placeholder="Client Contact"
+                              required
                             />
                           </div>
                           <div>
@@ -149,6 +154,7 @@ export default function AddClient({
                               }
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               placeholder="Client Email"
+                              required
                             />
                           </div>
                           <div>
@@ -168,6 +174,7 @@ export default function AddClient({
                               }
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               placeholder="Client Code"
+                              required
                             />
                           </div>
                           <div>
@@ -187,6 +194,7 @@ export default function AddClient({
                               }
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               placeholder="Company Logo (URL)"
+                              required
                             />
                           </div>
                           <div>
@@ -206,6 +214,7 @@ export default function AddClient({
                               }
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               placeholder="Client Phone"
+                              required
                             />
                           </div>
                           <div>
@@ -225,14 +234,15 @@ export default function AddClient({
                               }
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               placeholder="Password"
+                              required
                             />
                           </div>
                         </div>
                         {/* Form Buttons */}
                         <div className="flex items-center space-x-4">
-                          <button
+                        <button
                             type="button"
-                            className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                            className="text-black bg-success-500 hover:bg-success-600 focus:ring-4 focus:outline-none focus:ring-success-300 font-medium rounded-lg text-sm px-5 py-2.5"
                             onClick={addClient}
                           >
                             Add Client

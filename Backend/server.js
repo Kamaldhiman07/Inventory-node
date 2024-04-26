@@ -1,6 +1,7 @@
 const express = require("express");
 const { main } = require("./models/index");
 const productRoute = require("./router/product");
+// const clientRoute = require("./router/client");
 const storeRoute = require("./router/store");
 const purchaseRoute = require("./router/purchase");
 const salesRoute = require("./router/sales");
@@ -26,6 +27,8 @@ app.use("/api/purchase", purchaseRoute);
 
 // Sales API
 app.use("/api/sales", salesRoute);
+
+// app.use("/api/client", clientRoute);
 
 // ------------- Signin --------------
 let userAuthCheck;
@@ -60,23 +63,51 @@ app.get("/api/login", (req, res) => {
 // Registration API
 app.post("/api/register", (req, res) => {
   let registerUser = new User({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
+    name: req.body.name,
+    contact: req.body.contact,
     email: req.body.email,
-    password: req.body.password,
-    phoneNumber: req.body.phoneNumber,
-    imageUrl: req.body.imageUrl,
+    code: req.body.code,
+    logo: req.body.logo,
+    phone: req.body.phone,
+    password: req.body.password
   });
 
   registerUser
     .save()
     .then((result) => {
-      res.status(200).send(result);
+      res.status(200).send('test');
       alert("Signup Successfull");
     })
     .catch((err) => console.log("Signup: ", err));
-  console.log("request: ", req.body);
+  console.log("request send: ", req.body);
 });
+
+// Get All Products
+app.post("/api/getAll", async (req, res) => {
+  try {
+    const allUsers = await User.find({}).sort({ _id: -1 }); // Retrieve all users sorted by _id in descending order
+    res.json(allUsers);
+  } catch (error) {
+    // Handle any errors that might occur during the database operation
+    console.error("Error retrieving users:", error);
+    res.status(500).json({ error: "Failed to retrieve users" });
+  }
+});
+
+app.get("/api/searchUser", async (req, res) => {
+  try {
+    const searchTerm = req.query.searchTerm;
+    const users = await User.find({
+      name: { $regex: searchTerm, $options: "i" },
+    });
+    res.json(users);
+  } catch (error) {
+    // Handle any errors that might occur during the database operation
+    console.error("Error searching for products:", error);
+    res.status(500).json({ error: "Failed to search for products" });
+  }
+});
+
 
 
 app.get("/testget", async (req,res)=>{
