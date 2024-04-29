@@ -17,26 +17,33 @@ function Devices() {
     fetchClientsData();
   }, [updatePage]);
 
+  // const fetchClientsData = () => {
+  //   fetch(`http://localhost:4000/api/device/getAll/${authContext.user}`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ userId: authContext.user }),
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error('Network response was not ok');
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       setAllClients(data);
+  //     })
+  //     .catch((err) => console.error('Error fetching clients:', err));
+  // };
   const fetchClientsData = () => {
-    fetch(`http://localhost:4000/api/getAll`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ userId: authContext.user }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
+    fetch(`http://localhost:4000/api/device/get/${authContext.user}`)
+      .then((response) => response.json())
       .then((data) => {
         setAllClients(data);
       })
-      .catch((err) => console.error('Error fetching clients:', err));
+      .catch((err) => console.log(err));
   };
-  
 
   const fetchSearchData = (searchTerm) => {
     fetch(`http://localhost:4000/api/searchUser?searchTerm=${searchTerm}`)
@@ -154,7 +161,7 @@ function Devices() {
               {clients.map((client) => (
                 <tr key={client.id}>
                   <td className="whitespace-nowrap px-4 py-2  text-gray-900">
-                    {client.name}
+                    {client.devicename}
                   </td>
                   
                   <td className="whitespace-nowrap px-4 py-2 text-gray-700">
