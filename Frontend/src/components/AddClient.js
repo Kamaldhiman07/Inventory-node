@@ -2,11 +2,18 @@ import { Fragment, useContext, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import AuthContext from "../AuthContext";
+import UploadImage from "../components/UploadImage";
 
 export default function AddClient({
   addClientModalSetting,
   handlePageUpdate,
 }) {
+  // const [form, setForm] = useState({
+  //   logo: "",
+  // });
+
+  // const navigate = useNavigate();
+
   const authContext = useContext(AuthContext);
   const [client, setClient] = useState({
     userId: authContext.user,
@@ -14,7 +21,7 @@ export default function AddClient({
     contact: "",
     email: "",
     code: "",
-    logo: "", // Assuming this will be an image URL
+     logo: "", // Assuming this will be an image URL
     phone: "",
     password: "",
   });
@@ -26,9 +33,35 @@ export default function AddClient({
     setClient({ ...client, [key]: value });
   };
 
-  // console.log(client);
+  const validateForm = () => {
+    if (
+      !client.name ||
+      !client.contact ||
+      !client.email ||
+      !client.code ||
+      !client.phone ||
+      !client.password
+    ) {
+      alert("Please fill in all fields.");
+      return false;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(client.email)) {
+      alert("Please enter a valid email address.");
+      return false;
+    }
+
+    return true;
+  };
+
   const addClient = () => {
-    fetch("http://localhost:4000/api/client/add", {
+    if (!validateForm()) {
+      return;
+    }
+
+    fetch("http://localhost:4000/api/register", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -43,6 +76,28 @@ export default function AddClient({
       })
       .catch((err) => console.log(err));
   };
+
+    // Uploading image to cloudinary
+    const uploadImage = async (image) => {
+      const data = new FormData();
+      data.append("file", image);
+      data.append("upload_preset", "inventoryapp");
+  
+      await fetch("https://api.cloudinary.com/v1_1/ddhayhptm/image/upload", {
+        method: "POST",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setClient({ ...client, logo: data.url });
+          alert("Image Successfully Uploaded");
+        })
+        .catch((error) => console.log(error));
+    };
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+    }
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -178,24 +233,7 @@ export default function AddClient({
                             />
                           </div>
                           <div>
-                            <label
-                              htmlFor="logo"
-                              className="block mb-2 text-sm font-medium text-gray-900"
-                            >
-                              Company Logo (URL)
-                            </label>
-                            <input
-                              type="text"
-                              name="logo"
-                              id="logo"
-                              value={client.logo}
-                              onChange={(e) =>
-                                handleInputChange(e.target.name, e.target.value)
-                              }
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                              placeholder="Company Logo (URL)"
-                              required
-                            />
+                          <UploadImage uploadImage={uploadImage} />
                           </div>
                           <div>
                             <label

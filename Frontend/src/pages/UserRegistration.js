@@ -63,8 +63,8 @@ function Inventory() {
   };
 
   const deleteClient = (id) => {
-    fetch(`http://localhost:4000/api/clients/delete/${id}`, {
-      method: "DELETE",
+    fetch(`http://localhost:4000/api/deleteClient/${id}`, {
+      method: "DELETE", // Change method to DELETE
     })
       .then((response) => response.json())
       .then((data) => {
@@ -72,6 +72,7 @@ function Inventory() {
       })
       .catch((err) => console.log(err));
   };
+  
 
   const handlePageUpdate = () => {
     setUpdatePage(!updatePage);
@@ -79,7 +80,7 @@ function Inventory() {
 
   const handleSearchTerm = (e) => {
     setSearchTerm(e.target.value);
-    fetchSearchData();
+    fetchSearchData(e.target.value);
   };
 
   return (
@@ -166,7 +167,9 @@ function Inventory() {
                     {client.code}
                   </td>
                   <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                    {/* Display logo */}
+                  {client.logo && (
+                    <img src={client.logo} alt="Company Logo" style={{ width: '70px' }} />
+                  )}
                   </td>
                   <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                     {client.phone}
@@ -180,7 +183,7 @@ function Inventory() {
                     </span>
                     <span
                       className="text-red-600 px-2 cursor-pointer"
-                      onClick={() => deleteClient(client.id)}
+                      onClick={() => deleteClient(client._id)}
                     >
                       Delete
                     </span>
