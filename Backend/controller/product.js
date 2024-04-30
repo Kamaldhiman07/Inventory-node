@@ -4,13 +4,14 @@ const Sales = require("../models/sales");
 
 // Add Post
 const addProduct = (req, res) => {
-  console.log("req: ", req.body.userId);
+  console.log("req: ", req.body);
   const addProduct = new Product({
     userID: req.body.userId,
     name: req.body.name,
     manufacturer: req.body.manufacturer,
     client: req.body.client,
     collected_by: req.body.collected_by,
+    images:"",
     stock: 0,
     description: req.body.description,
   });
