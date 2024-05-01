@@ -1,22 +1,16 @@
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import UploadImage from "../components/UploadImage";
+// import UploadImage from "../components/UploadImage";
 
 export default function UpdateClient({
   updateClientData,
   updateModalSetting,
 }) {
-  const { _id, name, contact, email, code, logo, phone, password } = updateClientData;
+  const { _id,devicename } = updateClientData;
   const [client, setClient] = useState({
     userId: _id,
-    name: name,
-    contact: contact,
-    email: email,
-    code: code,
-    logo: logo,
-    phone: phone,
-    password: password,
+    devicename: devicename,
   });
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
@@ -25,8 +19,9 @@ export default function UpdateClient({
     setClient({ ...client, [key]: value });
   };
 
+  
   const updateClient = () => {
-    fetch("http://localhost:4000/api/updateUser", {
+    fetch("http://localhost:4000/api/device/update", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -34,7 +29,7 @@ export default function UpdateClient({
       body: JSON.stringify(client),
     })
       .then((result) => {
-        alert("Client Updated");
+        alert("Device Updated");
         setOpen(false);
       })
       .catch((err) => console.log(err));
@@ -57,7 +52,7 @@ export default function UpdateClient({
       })
       .catch((error) => console.log(error));
   };
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
   }
@@ -107,7 +102,7 @@ export default function UpdateClient({
                         as="h3"
                         className="text-lg font-semibold leading-6 text-gray-900 "
                       >
-                        Update Client
+                        Update Device
                       </Dialog.Title>
                       <form action="#">
                         <div className="grid gap-4 mb-4 sm:grid-cols-2">
@@ -116,133 +111,30 @@ export default function UpdateClient({
                               htmlFor="name"
                               className="block mb-2 text-sm font-medium text-gray-900"
                             >
-                              Client Name
+                              Device Name
                             </label>
+                            
                             <input
                               type="text"
-                              name="name"
-                              id="name"
-                              value={client.name}
+                              name="devicename"
+                              id="devicename"
+                              value={client.devicename}
                               onChange={(e) =>
                                 handleInputChange(e.target.name, e.target.value)
                               }
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                              placeholder="Client Name"
+                              placeholder="Device Name"
                               required
                             />
                           </div>
-                          <div>
-                            <label
-                              htmlFor="contact"
-                              className="block mb-2 text-sm font-medium text-gray-900"
-                            >
-                              Client Contact
-                            </label>
-                            <input
-                              type="text"
-                              name="contact"
-                              id="contact"
-                              value={client.contact}
-                              onChange={(e) =>
-                                handleInputChange(e.target.name, e.target.value)
-                              }
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                              placeholder="Client Contact"
-                              required
-                            />
                           </div>
-                          <div>
-                            <label
-                              htmlFor="email"
-                              className="block mb-2 text-sm font-medium text-gray-900"
-                            >
-                              Client Email
-                            </label>
-                            <input
-                              type="email"
-                              name="email"
-                              id="email"
-                              value={client.email}
-                              onChange={(e) =>
-                                handleInputChange(e.target.name, e.target.value)
-                              }
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                              placeholder="Client Email"
-                              required
-                            />
-                          </div>
-                          <div>
-                            <label
-                              htmlFor="code"
-                              className="block mb-2 text-sm font-medium text-gray-900"
-                            >
-                              Client Code
-                            </label>
-                            <input
-                              type="text"
-                              name="code"
-                              id="code"
-                              value={client.code}
-                              onChange={(e) =>
-                                handleInputChange(e.target.name, e.target.value)
-                              }
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                              placeholder="Client Code"
-                              required
-                              readOnly
-                            />
-                          </div>
-                          <div>
-                          <UploadImage uploadImage={uploadImage} />
-                          </div>
-                          <div>
-                            <label
-                              htmlFor="phone"
-                              className="block mb-2 text-sm font-medium text-gray-900"
-                            >
-                              Client Phone
-                            </label>
-                            <input
-                              type="text"
-                              name="phone"
-                              id="phone"
-                              value={client.phone}
-                              onChange={(e) =>
-                                handleInputChange(e.target.name, e.target.value)
-                              }
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                              placeholder="Client Phone"
-                              required
-                            />
-                          </div>
-                          <div>
-                            <label
-                              htmlFor="password"
-                              className="block mb-2 text-sm font-medium text-gray-900"
-                            >
-                              Password
-                            </label>
-                            <input
-                              type="password"
-                              name="password"
-                              id="password"
-                              value={client.password}
-                              onChange={(e) =>
-                                handleInputChange(e.target.name, e.target.value)
-                              }
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                              placeholder="Password"
-                              required
-                            />
-                          </div>
-                        </div>
                         <div className="flex items-center space-x-4">
                           <button
                             type="button"
                             className="text-black bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5"
                             onClick={updateClient}
                           >
-                            Update Client
+                            Update Device
                           </button>
                           <button
                             type="button"
@@ -257,7 +149,7 @@ export default function UpdateClient({
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                {/* <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:w-auto"
@@ -266,7 +158,7 @@ export default function UpdateClient({
                   >
                     Cancel
                   </button>
-                </div>
+                </div> */}
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -274,7 +166,4 @@ export default function UpdateClient({
       </Dialog>
     </Transition.Root>
   );
-
 }
-  
-

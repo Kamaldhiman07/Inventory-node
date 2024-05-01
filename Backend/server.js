@@ -8,9 +8,13 @@ const salesRoute = require("./router/sales");
 const cors = require("cors");
 const User = require("./models/users");
 const Product = require("./models/Product");
+<<<<<<< HEAD
 const deviceRoute = require("./router/device");
 const makeRoute = require("./router/make");
 // const recoveredmaterialRoute = require("./router/recoveredmaterial");
+=======
+
+>>>>>>> 8ae17877cc96bb9bff9acc15d1993ae8ed174fce
 
 const app = express();
 const PORT = 4000;
@@ -20,7 +24,7 @@ app.use(cors());
 
 // Store API
 app.use("/api/store", storeRoute);
-app.use("/api/device", deviceRoute);
+
 // Products API
 app.use("/api/product", productRoute);
 
@@ -38,6 +42,7 @@ app.use("/api/make", makeRoute);
 let userAuthCheck;
 app.post("/api/login", async (req, res) => {
   console.log(req.body);
+  // res.send("hi");
   try {
     const user = await User.findOne({
       email: req.body.email,
@@ -53,7 +58,7 @@ app.post("/api/login", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(500).send(error.message);
+    res.send(error);
   }
 });
 
@@ -64,24 +69,25 @@ app.get("/api/login", (req, res) => {
 // ------------------------------------
 
 // Registration API
-app.post("/api/register", async (req, res) => {
-  try {
-    let registerUser = new User({
-      name: req.body.name,
-      contact: req.body.contact,
-      email: req.body.email,
-      code: req.body.code,
-      logo: req.body.logo,
-      phone: req.body.phone,
-      password: req.body.password
-    });
+app.post("/api/register", (req, res) => {
+  let registerUser = new User({
+    name: req.body.name,
+    contact: req.body.contact,
+    email: req.body.email,
+    code: req.body.code,
+    logo: req.body.logo,
+    phone: req.body.phone,
+    password: req.body.password
+  });
 
-    await registerUser.save();
-    res.status(200).send('Signup Successfull');
-  } catch (error) {
-    console.log("Signup Error: ", error);
-    res.status(500).send('Signup failed');
-  }
+  registerUser
+    .save()
+    .then((result) => {
+      res.status(200).send('test');
+      alert("Signup Successfull");
+    })
+    .catch((err) => console.log("Signup: ", err));
+  console.log("request send: ", req.body);
 });
 
 // Get All Products
@@ -91,12 +97,12 @@ app.post("/api/getAll", async (req, res) => {
     const allUsers = await User.find({}).sort({ _id: -1 }); // Retrieve all users sorted by _id in descending order
     res.json(allUsers);
   } catch (error) {
+    // Handle any errors that might occur during the database operation
     console.error("Error retrieving users:", error);
     res.status(500).json({ error: "Failed to retrieve users" });
   }
 });
 
-// Search User API
 app.get("/api/searchUser", async (req, res) => {
   try {
     const searchTerm = req.query.searchTerm;
@@ -105,6 +111,7 @@ app.get("/api/searchUser", async (req, res) => {
     });
     res.json(users);
   } catch (error) {
+<<<<<<< HEAD
     console.error("Error searching for users:", error);
     res.status(500).json({ error: "Failed to search for users" });
   }
@@ -147,18 +154,23 @@ app.delete("/api/deleteClient/:id", async (req, res) => { // Change to app.delet
 });
 
 // Testing Endpoint
+=======
+    // Handle any errors that might occur during the database operation
+    console.error("Error searching for products:", error);
+    res.status(500).json({ error: "Failed to search for products" });
+  }
+});
+
+
+
+>>>>>>> 8ae17877cc96bb9bff9acc15d1993ae8ed174fce
 app.get("/testget", async (req,res)=>{
   const result = await Product.findOne({ _id: '6429979b2e5434138eda1564'})
-  res.json(result);
-});
+  res.json(result)
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
+})
 
-// Start the server
+// Here we are listening to the server
 app.listen(PORT, () => {
-  console.log("Server is running on port", PORT);
+  console.log("I am live again");
 });

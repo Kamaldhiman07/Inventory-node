@@ -4,7 +4,7 @@ const ProductSchema = new mongoose.Schema(
   {
     userID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'users',
+      ref: "users",
       required: true,
     },
     name: {
@@ -27,11 +27,20 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    image: {
+      type: String,
+      required: false,
+    },
     description: String,
+    collectionImages: [
+      {
+        type: String, // Assuming these are URLs to the images
+        required: false,
+      },
+    ],
   },
   { timestamps: true }
 );
-
 
 const Product = mongoose.model("product", ProductSchema);
 module.exports = Product;

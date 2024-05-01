@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import AddClient from "../components/AddDevices"; // Adjust import path as needed
-import UpdateClient from "../components/UpdateClient"; // Adjust import path as needed
+import UpdateClient from "../components/UpdateDevice"; // Adjust import path as needed
 import AuthContext from "../AuthContext";
 
 function Devices() {
@@ -69,16 +69,26 @@ function Devices() {
     setShowUpdateModal(!showUpdateModal);
   };
 
+  // const deleteClient = (id) => {
+  //   fetch(`http://localhost:4000/api/device/delete/${id}`, {
+  //     method: "DELETE",
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setUpdatePage(!updatePage);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
   const deleteClient = (id) => {
-    fetch(`http://localhost:4000/api/clients/delete/${id}`, {
-      method: "DELETE",
-    })
+    console.log("Product ID: ", id);
+    console.log(`http://localhost:4000/api/device/delete/${id}`);
+    fetch(`http://localhost:4000/api/device/delete/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setUpdatePage(!updatePage);
-      })
-      .catch((err) => console.log(err));
+      });
   };
+
 
   const handlePageUpdate = () => {
     setUpdatePage(!updatePage);
@@ -159,7 +169,7 @@ function Devices() {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {clients.map((client) => (
-                <tr key={client.id}>
+                <tr key={client}>
                   <td className="whitespace-nowrap px-4 py-2  text-gray-900">
                     {client.devicename}
                   </td>
@@ -173,7 +183,7 @@ function Devices() {
                     </span>
                     <span
                       className="text-red-600 px-2 cursor-pointer"
-                      onClick={() => deleteClient(client.id)}
+                      onClick={() => deleteClient(client._id)}
                     >
                       Delete
                     </span>
