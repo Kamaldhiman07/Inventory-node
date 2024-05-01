@@ -1,4 +1,4 @@
-import { Fragment, useContext, useRef, useState } from "react";
+import { Fragment, useContext, useRef, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import AuthContext from "../AuthContext";
@@ -8,12 +8,6 @@ export default function AddClient({
   addClientModalSetting,
   handlePageUpdate,
 }) {
-  // const [form, setForm] = useState({
-  //   logo: "",
-  // });
-
-  // const navigate = useNavigate();
-
   const authContext = useContext(AuthContext);
   const [client, setClient] = useState({
     userId: authContext.user,
@@ -21,7 +15,7 @@ export default function AddClient({
     contact: "",
     email: "",
     code: "",
-     logo: "", // Assuming this will be an image URL
+    logo: "", // Assuming this will be an image URL
     phone: "",
     password: "",
   });
@@ -77,27 +71,52 @@ export default function AddClient({
       .catch((err) => console.log(err));
   };
 
-    // Uploading image to cloudinary
-    const uploadImage = async (image) => {
-      const data = new FormData();
-      data.append("file", image);
-      data.append("upload_preset", "inventoryapp");
-  
-      await fetch("https://api.cloudinary.com/v1_1/ddhayhptm/image/upload", {
-        method: "POST",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setClient({ ...client, logo: data.url });
-          alert("Image Successfully Uploaded");
-        })
-        .catch((error) => console.log(error));
-    };
+  const uploadImage = async (image) => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "inventoryapp");
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
+    await fetch("https://api.cloudinary.com/v1_1/ddhayhptm/image/upload", {
+      method: "POST",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setClient({ ...client, logo: data.url });
+        alert("Image Successfully Uploaded");
+      })
+      .catch((error) => console.log(error));
+  };
+
+     // Function to generate random password
+  const generateRandomPassword = () => {
+    const length = 10; // Length of the password
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+";
+    let password = "";
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      password += charset[randomIndex];
     }
+    return password;
+  };
+
+  // Function to generate random client code in the format XXX,XX,XXX
+  const generateRandomClientCode = () => {
+    const code = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+    return code;
+  };
+
+  // Autofill password and client code fields with random values when component mounts
+  useEffect(() => {
+    const randomPassword = generateRandomPassword();
+    const randomClientCode = generateRandomClientCode();
+    setClient((prevClient) => ({
+      ...prevClient,
+      password: randomPassword,
+      code: randomClientCode,
+    }));
+  }, []); // Empty dependency array ensures this effect runs only once on mount
+
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -230,6 +249,7 @@ export default function AddClient({
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               placeholder="Client Code"
                               required
+                              readOnly
                             />
                           </div>
                           <div>
@@ -263,7 +283,7 @@ export default function AddClient({
                               Password
                             </label>
                             <input
-                              type="password"
+                              type="text"
                               name="password"
                               id="password"
                               value={client.password}

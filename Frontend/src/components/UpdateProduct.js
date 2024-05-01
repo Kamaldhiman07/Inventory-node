@@ -84,7 +84,7 @@ export default function UpdateProduct({
                         as="h3"
                         className="text-lg font-semibold leading-6 text-gray-900 "
                       >
-                        Update Product
+                        Update Collection
                       </Dialog.Title>
                       <form action="#">
                         <div className="grid gap-4 mb-4 sm:grid-cols-2">
@@ -112,10 +112,10 @@ export default function UpdateProduct({
                               htmlFor="manufacturer"
                               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             >
-                              Manufacturer
+                              Collections Date
                             </label>
                             <input
-                              type="text"
+                              type="date"
                               name="manufacturer"
                               id="manufacturer"
                               value={product.manufacturer}
@@ -132,7 +132,7 @@ export default function UpdateProduct({
                               htmlFor="client"
                               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             >
-                              Manufacturer
+                              Client Name
                             </label>
                             <input
                               type="text"
@@ -174,7 +174,7 @@ export default function UpdateProduct({
                               htmlFor="description"
                               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             >
-                              Description
+                              Location
                             </label>
                             <textarea
                               id="description"
@@ -231,7 +231,7 @@ export default function UpdateProduct({
                     className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
                     onClick={updateProduct}
                   >
-                    Update Product
+                    Update Collection
                   </button>
                   <button
                     type="button"

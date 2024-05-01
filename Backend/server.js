@@ -9,6 +9,8 @@ const cors = require("cors");
 const User = require("./models/users");
 const Product = require("./models/Product");
 const deviceRoute = require("./router/device");
+const makeRoute = require("./router/make");
+// const recoveredmaterialRoute = require("./router/recoveredmaterial");
 
 const app = express();
 const PORT = 4000;
@@ -27,6 +29,8 @@ app.use("/api/purchase", purchaseRoute);
 
 // Sales API
 app.use("/api/sales", salesRoute);
+app.use("/api/make", makeRoute);
+// app.use("/api/recoveredmaterial", recoveredmaterialRoute);
 
 // app.use("/api/client", clientRoute);
 
@@ -81,8 +85,9 @@ app.post("/api/register", async (req, res) => {
 });
 
 // Get All Products
-app.get("/api/getAll", async (req, res) => {
+app.post("/api/getAll", async (req, res) => {
   try {
+    // console.log('yes');
     const allUsers = await User.find({}).sort({ _id: -1 }); // Retrieve all users sorted by _id in descending order
     res.json(allUsers);
   } catch (error) {
@@ -105,7 +110,6 @@ app.get("/api/searchUser", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 app.post("/api/updateUser/", (req, res) => {
   const userId = req.body.userId; // Correctly obtain the user ID from the request body
   console.log(userId);
@@ -142,14 +146,7 @@ app.delete("/api/deleteClient/:id", async (req, res) => { // Change to app.delet
   }
 });
 
-
-
-
-
-
-=======
 // Testing Endpoint
->>>>>>> 775577dfd9991e525aeab87dd1d31fff2377033d
 app.get("/testget", async (req,res)=>{
   const result = await Product.findOne({ _id: '6429979b2e5434138eda1564'})
   res.json(result);
