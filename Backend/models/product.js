@@ -31,13 +31,14 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    description: String,
-    collectionImages: [
+    
+    images: [
       {
-        type: String, // Assuming these are URLs to the images
+        type: String, 
         required: false,
       },
     ],
+    description: String,
   },
   { timestamps: true }
 );
