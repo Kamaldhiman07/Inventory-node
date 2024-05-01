@@ -10,7 +10,6 @@ function Inventory() {
   const [recoveredmaterials, setAllRecoveredMaterial] = useState([]);
   const [searchTerm, setSearchTerm] = useState();
   const [updatePage, setUpdatePage] = useState(true);
-  const [stores, setAllStores] = useState([]);
 
   const authContext = useContext(AuthContext);
 
@@ -19,7 +18,7 @@ function Inventory() {
   }, [updatePage]);
 
   const fetchRecoveredMaterialData = () => {
-    fetch(`http://localhost:4000/api/make/get/${authContext.user}`)
+    fetch(`http://localhost:4000/api/recoveredmaterial/get/${authContext.user}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -29,7 +28,7 @@ function Inventory() {
   };
 
   const fetchSearchData = () => {
-    fetch(`http://localhost:4000/api/make/search?searchTerm=${searchTerm}`)
+    fetch(`http://localhost:4000/api/recoveredmaterial/search?searchTerm=${searchTerm}`)
       .then((response) => response.json())
       .then((data) => {
         setAllRecoveredMaterial(data);
@@ -47,7 +46,7 @@ function Inventory() {
   };
 
   const deleteItem = (id) => {
-    fetch(`http://localhost:4000/api/make/delete/${id}`)
+    fetch(`http://localhost:4000/api/recoveredmaterial/delete/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setUpdatePage(!updatePage);

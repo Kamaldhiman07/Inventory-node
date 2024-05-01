@@ -42,7 +42,7 @@ const deleteSelectedRecoveredMaterial = async (req, res) => {
 const updateSelectedRecoveredMaterial = async (req, res) => {
     try {
       const updatedResult = await RecoveredMaterial.findByIdAndUpdate(
-        { _id: req.body.recoveredMaterialID },
+        { _id: req.body.recoveredMaterialId },
         {
           name: req.body.name,
           // Additional fields to update if necessary

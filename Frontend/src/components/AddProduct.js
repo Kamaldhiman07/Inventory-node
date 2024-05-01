@@ -289,7 +289,6 @@ export default function AddProduct({
                     </div>
                   </div>
                 </div>
-<<<<<<< HEAD
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
                     type="button"
@@ -307,8 +306,6 @@ export default function AddProduct({
                     Cancel
                   </button>
                 </div>
-=======
->>>>>>> 8ae17877cc96bb9bff9acc15d1993ae8ed174fce
               </Dialog.Panel>
             </Transition.Child>
           </div>

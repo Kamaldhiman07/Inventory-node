@@ -8,13 +8,9 @@ const salesRoute = require("./router/sales");
 const cors = require("cors");
 const User = require("./models/users");
 const Product = require("./models/Product");
-<<<<<<< HEAD
 const deviceRoute = require("./router/device");
 const makeRoute = require("./router/make");
-// const recoveredmaterialRoute = require("./router/recoveredmaterial");
-=======
-
->>>>>>> 8ae17877cc96bb9bff9acc15d1993ae8ed174fce
+ const recoveredmaterialRoute = require("./router/recoveredmaterial");
 
 const app = express();
 const PORT = 4000;
@@ -34,7 +30,7 @@ app.use("/api/purchase", purchaseRoute);
 // Sales API
 app.use("/api/sales", salesRoute);
 app.use("/api/make", makeRoute);
-// app.use("/api/recoveredmaterial", recoveredmaterialRoute);
+ app.use("/api/recoveredmaterial", recoveredmaterialRoute);
 
 // app.use("/api/client", clientRoute);
 
@@ -111,7 +107,6 @@ app.get("/api/searchUser", async (req, res) => {
     });
     res.json(users);
   } catch (error) {
-<<<<<<< HEAD
     console.error("Error searching for users:", error);
     res.status(500).json({ error: "Failed to search for users" });
   }
@@ -154,16 +149,6 @@ app.delete("/api/deleteClient/:id", async (req, res) => { // Change to app.delet
 });
 
 // Testing Endpoint
-=======
-    // Handle any errors that might occur during the database operation
-    console.error("Error searching for products:", error);
-    res.status(500).json({ error: "Failed to search for products" });
-  }
-});
-
-
-
->>>>>>> 8ae17877cc96bb9bff9acc15d1993ae8ed174fce
 app.get("/testget", async (req,res)=>{
   const result = await Product.findOne({ _id: '6429979b2e5434138eda1564'})
   res.json(result)

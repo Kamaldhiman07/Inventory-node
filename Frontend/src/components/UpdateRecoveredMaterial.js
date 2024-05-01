@@ -7,15 +7,15 @@ export default function UpdateRecoveredMaterial({
   updateModalSetting,
 }) {
   const { _id, name } = updateRecoveredMaterialData;
-  const [recoveredmaterial, setRecoveredMaterial] = useState({
-    makeID: _id,
+  const [recoveredMaterial, setRecoveredMaterial] = useState({
+    recoveredMaterialId: _id,
     name: name,
   });
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
 
   const handleInputChange = (key, value) => {
-    setRecoveredMaterial({ ...recoveredmaterial, [key]: value });
+    setRecoveredMaterial({ ...recoveredMaterial, [key]: value });
   };
 
   const updateRecoveredMaterial = () => {
@@ -24,14 +24,19 @@ export default function UpdateRecoveredMaterial({
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(recoveredmaterial),
+      body: JSON.stringify(recoveredMaterial),
     })
       .then((result) => {
-        alert("Recovered Material Updated");
-        setOpen(false);
+        if (result.ok) {
+          alert("Recovered Material Updated");
+          setOpen(false);
+        } else {
+          throw new Error("Failed to update recovered material");
+        }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
+  
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -93,7 +98,7 @@ export default function UpdateRecoveredMaterial({
                               type="text"
                               name="recoveredmaterial"
                               id="recoveredmaterial"
-                              value={recoveredmaterial.name}
+                              value={recoveredMaterial.name}
                               onChange={(e) =>
                                 handleInputChange(e.target.name, e.target.value)
                               }
