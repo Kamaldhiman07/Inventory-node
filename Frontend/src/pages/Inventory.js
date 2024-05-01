@@ -89,7 +89,7 @@ function Inventory() {
   return (
     <div className="col-span-12 lg:col-span-10  flex justify-center">
       <div className=" flex flex-col gap-5 w-11/12">
-        <div className="bg-white rounded p-3">
+        <div className="bg-white rounded p-3" style={{ display: "none" }} >
           <span className="font-semibold px-4">Overall Inventory</span>
           <div className=" flex flex-col md:flex-row justify-center items-center  ">
             <div className="flex flex-col p-10  w-full  md:w-3/12  ">
@@ -228,9 +228,9 @@ function Inventory() {
                 <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
                 Collection Date
                 </th>
-                {/* <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
+                <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
                 Collection Image
-                </th> */}
+                </th>
                 <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
                 Client Name
                 </th>
@@ -242,6 +242,7 @@ function Inventory() {
 
             <tbody className="divide-y divide-gray-200">
               {products.map((element, index) => {
+                console.log(element.image);
                 return (
                   <tr key={element._id}>
                     <td className="whitespace-nowrap px-4 py-2  text-gray-900">
@@ -253,9 +254,10 @@ function Inventory() {
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                      {element.manufacturer}
                     </td>
-                    {/* <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      
-                    </td> */}
+                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                      <img src={element.image} alt="Product Image" style={{ width: "71px" }} />
+                    </td>
+
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                     {element.client}
                     </td>

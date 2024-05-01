@@ -30,13 +30,44 @@ export default function AddProduct({
     setProduct({ ...product, image: file });
   };
 
+  // const addProduct = () => {
+  //   // Create a FormData object to append the image file
+  //   const formData = new FormData();
+  //   formData.append("file", product.image);
+  //   formData.append("upload_preset", "inventoryapp");
+
+  //   // Upload image to Cloudinary
+  //   fetch("https://api.cloudinary.com/v1_1/ddhayhptm/image/upload", {
+  //     method: "POST",
+  //     body: formData,
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       // Update product data with the image URL from Cloudinary
+  //       setProduct({ ...product, image: data.url });
+
+  //       // Now you can proceed to add the product with the image URL
+  //       fetch("http://localhost:4000/api/product/add", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-type": "application/json",
+  //         },
+  //         body: JSON.stringify(product),
+  //       })
+  //         .then((result) => {
+  //           alert("Product ADDED");
+  //           handlePageUpdate();
+  //           addProductModalSetting();
+  //         })
+  //         .catch((err) => console.log(err));
+  //     })
+  //     .catch((error) => console.log(error));
+  // };
   const addProduct = () => {
-    // Create a FormData object to append the image file
     const formData = new FormData();
     formData.append("file", product.image);
     formData.append("upload_preset", "inventoryapp");
-
-    // Upload image to Cloudinary
+  
     fetch("https://api.cloudinary.com/v1_1/ddhayhptm/image/upload", {
       method: "POST",
       body: formData,
@@ -44,15 +75,18 @@ export default function AddProduct({
       .then((res) => res.json())
       .then((data) => {
         // Update product data with the image URL from Cloudinary
-        setProduct({ ...product, image: data.url });
-
+        const productDataWithImage = {
+          ...product,
+          image: data.url,
+        };
+  
         // Now you can proceed to add the product with the image URL
         fetch("http://localhost:4000/api/product/add", {
           method: "POST",
           headers: {
             "Content-type": "application/json",
           },
-          body: JSON.stringify(product),
+          body: JSON.stringify(productDataWithImage),
         })
           .then((result) => {
             alert("Product ADDED");
@@ -63,7 +97,7 @@ export default function AddProduct({
       })
       .catch((error) => console.log(error));
   };
-
+  
   return (
     // Modal
     <Transition.Root show={open} as={Fragment}>

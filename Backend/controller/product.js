@@ -5,13 +5,14 @@ const Sales = require("../models/sales");
 // Add Post
 const addProduct = (req, res) => {
   console.log("req: ", req.body);
+ 
   const addProduct = new Product({
     userID: req.body.userId,
     name: req.body.name,
     manufacturer: req.body.manufacturer,
     client: req.body.client,
     collected_by: req.body.collected_by,
-    images:"",
+    image:req.body.image,
     stock: 0,
     description: req.body.description,
   });
@@ -59,6 +60,7 @@ const updateSelectedProduct = async (req, res) => {
         manufacturer: req.body.manufacturer,
         description: req.body.description,
         client: req.body.client,
+        image:req.body.image,
         collected_by: req.body.collected_by,
       },
       { new: true }

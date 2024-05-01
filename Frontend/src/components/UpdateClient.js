@@ -273,8 +273,7 @@ export default function UpdateClient({
       </Dialog>
     </Transition.Root>
   );
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> f3b9825691515f005e8714fa8f893e5e0e17167f
+  
+
