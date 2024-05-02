@@ -10,7 +10,9 @@ const User = require("./models/users");
 const Product = require("./models/Product");
 const deviceRoute = require("./router/device");
 const makeRoute = require("./router/make");
- const recoveredmaterialRoute = require("./router/recoveredmaterial");
+const recoveredmaterialRoute = require("./router/recoveredmaterial");
+const unrecoveredmaterialRoute = require("./router/unrecoveredmaterial");
+const modelRoute = require("./router/model");
 
 const app = express();
 const PORT = 4000;
@@ -30,7 +32,9 @@ app.use("/api/purchase", purchaseRoute);
 // Sales API
 app.use("/api/sales", salesRoute);
 app.use("/api/make", makeRoute);
- app.use("/api/recoveredmaterial", recoveredmaterialRoute);
+app.use("/api/recoveredmaterial", recoveredmaterialRoute);
+app.use("/api/unrecoveredmaterial", unrecoveredmaterialRoute);
+app.use("/api/model", modelRoute);
 
 // app.use("/api/client", clientRoute);
 

@@ -2,39 +2,39 @@ import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 
-export default function UpdateRecoveredMaterial({
-  updateRecoveredMaterialData,
+export default function UpdateModel({
+  updateModelData,
   updateModalSetting,
 }) {
-  const { _id, name } = updateRecoveredMaterialData;
-  const [recoveredMaterial, setRecoveredMaterial] = useState({
-    recoveredMaterialId: _id,
-    name: name,
+  const { _id, modelName, description } = updateModelData;
+  const [model, setModel] = useState({
+    modelId: _id,
+    modelName: modelName,
   });
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
 
   const handleInputChange = (key, value) => {
-    setRecoveredMaterial(prevState => ({
+    setModel(prevState => ({
       ...prevState,
       [key]: value
     }));
   };
 
-  const updateRecoveredMaterial = () => {
-    fetch("http://localhost:4000/api/recoveredmaterial/update", {
+  const updateModel = () => {
+    fetch("http://localhost:4000/api/model/update", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(recoveredMaterial),
+      body: JSON.stringify(model),
     })
       .then((result) => {
         if (result.ok) {
-          alert("Recovered Material Updated");
+          alert("Model Updated");
           setOpen(false);
         } else {
-          throw new Error("Failed to update recovered material");
+          throw new Error("Failed to update model");
         }
       })
       .catch((err) => console.error(err));
@@ -85,27 +85,27 @@ export default function UpdateRecoveredMaterial({
                         as="h3"
                         className="text-lg font-semibold leading-6 text-gray-900 "
                       >
-                        Update Recovered Material
+                        Update Model
                       </Dialog.Title>
-                      <form action="#">
+                      <form>
                         <div className="grid gap-4 mb-4 sm:grid-cols-2">
                           <div>
                             <label
-                              htmlFor="recoveredmaterial"
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                              htmlFor="modelName"
+                              className="block mb-2 text-sm font-medium text-gray-900"
                             >
-                              Recovered Material
+                              Model Name
                             </label>
                             <input
                               type="text"
-                              name="name" // Updated name attribute here
-                              id="recoveredmaterial"
-                              value={recoveredMaterial.name}
+                              name="modelName"
+                              id="modelName"
+                              value={model.modelName}
                               onChange={(e) =>
                                 handleInputChange(e.target.name, e.target.value)
                               }
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                              placeholder="Enter make name"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                              placeholder="Enter model name"
                             />
                           </div>
                         </div>
@@ -117,9 +117,9 @@ export default function UpdateRecoveredMaterial({
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-                    onClick={updateRecoveredMaterial}
+                    onClick={updateModel}
                   >
-                    Update Recovered Material
+                    Update Model
                   </button>
                   <button
                     type="button"

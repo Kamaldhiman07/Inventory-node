@@ -2,39 +2,39 @@ import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 
-export default function UpdateRecoveredMaterial({
-  updateRecoveredMaterialData,
+export default function UpdateUnrecoveredMaterial({
+  updateUnrecoveredMaterialData,
   updateModalSetting,
 }) {
-  const { _id, name } = updateRecoveredMaterialData;
-  const [recoveredMaterial, setRecoveredMaterial] = useState({
-    recoveredMaterialId: _id,
+  const { _id, name } = updateUnrecoveredMaterialData;
+  const [unrecoveredMaterial, setUnrecoveredMaterial] = useState({
+    unrecoveredMaterialId: _id,
     name: name,
   });
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
 
   const handleInputChange = (key, value) => {
-    setRecoveredMaterial(prevState => ({
+    setUnrecoveredMaterial(prevState => ({
       ...prevState,
       [key]: value
     }));
   };
 
-  const updateRecoveredMaterial = () => {
-    fetch("http://localhost:4000/api/recoveredmaterial/update", {
+  const updateUnrecoveredMaterial = () => {
+    fetch("http://localhost:4000/api/unrecoveredmaterial/update", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(recoveredMaterial),
+      body: JSON.stringify(unrecoveredMaterial),
     })
       .then((result) => {
         if (result.ok) {
-          alert("Recovered Material Updated");
+          alert("Unrecovered Material Updated");
           setOpen(false);
         } else {
-          throw new Error("Failed to update recovered material");
+          throw new Error("Failed to update unrecovered material");
         }
       })
       .catch((err) => console.error(err));
@@ -85,22 +85,22 @@ export default function UpdateRecoveredMaterial({
                         as="h3"
                         className="text-lg font-semibold leading-6 text-gray-900 "
                       >
-                        Update Recovered Material
+                        Update Unrecovered Material
                       </Dialog.Title>
                       <form action="#">
                         <div className="grid gap-4 mb-4 sm:grid-cols-2">
                           <div>
                             <label
-                              htmlFor="recoveredmaterial"
+                              htmlFor="unrecoveredmaterial"
                               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             >
-                              Recovered Material
+                              Unrecovered Material
                             </label>
                             <input
                               type="text"
                               name="name" // Updated name attribute here
-                              id="recoveredmaterial"
-                              value={recoveredMaterial.name}
+                              id="unrecoveredmaterial"
+                              value={unrecoveredMaterial.name}
                               onChange={(e) =>
                                 handleInputChange(e.target.name, e.target.value)
                               }
@@ -117,9 +117,9 @@ export default function UpdateRecoveredMaterial({
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-                    onClick={updateRecoveredMaterial}
+                    onClick={updateUnrecoveredMaterial}
                   >
-                    Update Recovered Material
+                    Update Unrecovered Material
                   </button>
                   <button
                     type="button"
