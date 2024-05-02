@@ -107,49 +107,49 @@ function SideMenu() {
                 <span className="text-sm font-medium">Devices</span>
               </Link>
               <Link
-                to="/menu2"
+                to="/make"
                 className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
               >
                 <span className="text-sm font-medium">Make</span>
               </Link>
               <Link
-                to="/menu2"
+                to="/recovered-material"
                 className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
               >
                 <span className="text-sm font-medium">Recovered Material</span>
               </Link>
               <Link
-                to="/menu2"
+                to="/unrecovered-material"
                 className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
               >
                 <span className="text-sm font-medium">Unrecovered Material</span>
               </Link>
               <Link
-                to="/menu2"
+                to="/model"
                 className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
               >
                 <span className="text-sm font-medium">Model</span>
               </Link>
               <Link
-                to="/menu2"
+                to="/operating-system"
                 className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
               >
                 <span className="text-sm font-medium">Operating System</span>
               </Link>
               <Link
-                to="/menu2"
+                to="/grade"
                 className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
               >
                 <span className="text-sm font-medium">Grade</span>
               </Link>
               <Link
-                to="/menu2"
+                to="/condition"
                 className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
               >
                 <span className="text-sm font-medium">Condition</span>
               </Link>
               <Link
-                to="/menu2"
+                to="/current-location"
                 className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
               >
                 <span className="text-sm font-medium">Current Loaction</span>
@@ -169,19 +169,19 @@ function SideMenu() {
             </summary>
             <nav className="ml-4 mt-2 flex flex-col space-y-1">
               <Link
-                to="/menu1"
+                to="/view-certificates"
                 className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
               >
                 <span className="text-sm font-medium">View Certificates</span>
               </Link>
               <Link
-                to="/menu2"
+                to="/generate-certificates"
                 className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
               >
                 <span className="text-sm font-medium">Generate Certificates</span>
               </Link>
               <Link
-                to="/menu2"
+                to="/manage-certificates"
                 className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
               >
                 <span className="text-sm font-medium">Manage Certificates</span>
@@ -201,13 +201,13 @@ function SideMenu() {
             </summary>
             <nav className="ml-4 mt-2 flex flex-col space-y-1">
               <Link
-                to="/menu1"
+                to="/client-report"
                 className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
               >
                 <span className="text-sm font-medium">Client Report</span>
               </Link>
               <Link
-                to="/menu2"
+                to="/weight-report"
                 className="flex items-center gap-2 rounded-lg hover:bg-gray-100 px-4 py-2 text-gray-500 hover:text-gray-700"
               >
                 <span className="text-sm font-medium">Weight Report</span>

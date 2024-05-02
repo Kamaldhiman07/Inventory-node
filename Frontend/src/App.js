@@ -17,6 +17,8 @@ import Devices from "./pages/Devices";
 import UserRegistration from './pages/UserRegistration';
 import Make from "./pages/Make";
 import RecoveredMaterial from "./pages/RecoveredMaterial";
+import UnrecoveredMaterial from "./pages/UnrecoveredMaterial";
+import Model from "./pages/Model";
 
 const App = () => {
   const [user, setUser] = useState("");
@@ -85,6 +87,8 @@ const App = () => {
             <Route path="/device" element={<Devices />} />
             <Route path="/make" element={<Make />} />
             <Route path="/recovered-material" element={<RecoveredMaterial />} />
+            <Route path="/unrecovered-material" element={<UnrecoveredMaterial />} />
+            <Route path="/model" element={<Model />} />
           </Route>
           <Route path="*" element={<NoPageFound />} />
         </Routes>

@@ -1,43 +1,38 @@
-import { Fragment, useRef, useState } from "react";
+import React, { Fragment, useContext, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
+import AuthContext from "../AuthContext";
 
-export default function UpdateRecoveredMaterial({
-  updateRecoveredMaterialData,
-  updateModalSetting,
+export default function AddModel({
+  addModelModalSetting,
+  handlePageUpdate,
 }) {
-  const { _id, name } = updateRecoveredMaterialData;
-  const [recoveredMaterial, setRecoveredMaterial] = useState({
-    recoveredMaterialId: _id,
-    name: name,
+  const authContext = useContext(AuthContext);
+  const [model, setModel] = useState({
+    modelId: authContext.user,
+    modelName: "",
   });
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
 
   const handleInputChange = (key, value) => {
-    setRecoveredMaterial(prevState => ({
-      ...prevState,
-      [key]: value
-    }));
+    setModel({ ...model, [key]: value });
   };
 
-  const updateRecoveredMaterial = () => {
-    fetch("http://localhost:4000/api/recoveredmaterial/update", {
+  const addModel = () => {
+    fetch("http://localhost:4000/api/model/add", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(recoveredMaterial),
+      body: JSON.stringify(model),
     })
       .then((result) => {
-        if (result.ok) {
-          alert("Recovered Material Updated");
-          setOpen(false);
-        } else {
-          throw new Error("Failed to update recovered material");
-        }
+        alert("Model Added");
+        handlePageUpdate();
+        addModelModalSetting();
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -85,29 +80,29 @@ export default function UpdateRecoveredMaterial({
                         as="h3"
                         className="text-lg font-semibold leading-6 text-gray-900 "
                       >
-                        Update Recovered Material
+                        Add Model
                       </Dialog.Title>
-                      <form action="#">
+                      <form>
                         <div className="grid gap-4 mb-4 sm:grid-cols-2">
                           <div>
                             <label
-                              htmlFor="recoveredmaterial"
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                              htmlFor="modelName"
+                              className="block mb-2 text-sm font-medium text-gray-900"
                             >
-                              Recovered Material
+                              Model Name
                             </label>
                             <input
                               type="text"
-                              name="name" // Updated name attribute here
-                              id="recoveredmaterial"
-                              value={recoveredMaterial.name}
+                              name="modelName"
+                              id="modelName"
+                              value={model.modelName}
                               onChange={(e) =>
                                 handleInputChange(e.target.name, e.target.value)
                               }
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                              placeholder="Enter make name"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                             />
                           </div>
+                    
                         </div>
                       </form>
                     </div>
@@ -117,14 +112,14 @@ export default function UpdateRecoveredMaterial({
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-                    onClick={updateRecoveredMaterial}
+                    onClick={addModel}
                   >
-                    Update Recovered Material
+                    Add Model
                   </button>
                   <button
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                    onClick={() => updateModalSetting()}
+                    onClick={() => addModelModalSetting()}
                     ref={cancelButtonRef}
                   >
                     Cancel
