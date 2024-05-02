@@ -19,6 +19,7 @@ import Make from "./pages/Make";
 import RecoveredMaterial from "./pages/RecoveredMaterial";
 import UnrecoveredMaterial from "./pages/UnrecoveredMaterial";
 import Model from "./pages/Model";
+import OperatingSystem from "./pages/OperatingSystem";
 
 const App = () => {
   const [user, setUser] = useState("");
@@ -89,6 +90,8 @@ const App = () => {
             <Route path="/recovered-material" element={<RecoveredMaterial />} />
             <Route path="/unrecovered-material" element={<UnrecoveredMaterial />} />
             <Route path="/model" element={<Model />} />
+            <Route path="/operatingsystem" element={<OperatingSystem />} />
+            
           </Route>
           <Route path="*" element={<NoPageFound />} />
         </Routes>

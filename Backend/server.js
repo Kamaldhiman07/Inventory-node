@@ -13,6 +13,8 @@ const makeRoute = require("./router/make");
 const recoveredmaterialRoute = require("./router/recoveredmaterial");
 const unrecoveredmaterialRoute = require("./router/unrecoveredmaterial");
 const modelRoute = require("./router/model");
+const osRoute = require("./router/os");
+
 
 const app = express();
 const PORT = 4000;
@@ -22,7 +24,7 @@ app.use(cors());
 
 // Store API
 app.use("/api/store", storeRoute);
-
+app.use("/api/os", osRoute);
 // Products API
 app.use("/api/product", productRoute);
 
