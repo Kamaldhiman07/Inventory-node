@@ -15,6 +15,8 @@ import Sales from "./pages/Sales";
 import PurchaseDetails from "./pages/PurchaseDetails";
 import Devices from "./pages/Devices";
 import UserRegistration from './pages/UserRegistration';
+import Make from "./pages/Make";
+import RecoveredMaterial from "./pages/RecoveredMaterial";
 
 const App = () => {
   const [user, setUser] = useState("");
@@ -75,12 +77,14 @@ const App = () => {
             }
           >
             <Route index element={<Dashboard />} />
-            <Route path="/inventory" element={<Inventory />} />
+            <Route path="/collection" element={<Inventory />} />
             <Route path="/purchase-details" element={<PurchaseDetails />} />
             <Route path="/sales" element={<Sales />} />
             <Route path="/manage-store" element={<Store />} />
             <Route path="/user-register" element={<UserRegistration />} />
             <Route path="/device" element={<Devices />} />
+            <Route path="/make" element={<Make />} />
+            <Route path="/recovered-material" element={<RecoveredMaterial />} />
           </Route>
           <Route path="*" element={<NoPageFound />} />
         </Routes>

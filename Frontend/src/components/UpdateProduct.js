@@ -2,7 +2,6 @@ import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 
-
 export default function UpdateProduct({
   updateProductData,
   updateModalSetting,
@@ -15,29 +14,51 @@ export default function UpdateProduct({
     description: description,
     client: client,
     image: image,
-    images: images,
     collected_by: collected_by,
+    images: images,
   });
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
-  const collectedImagesInputRef = useRef(null); // Step 2: Define a ref
-  console.log("Ref assignment:", collectedImagesInputRef);
+
   const handleInputChange = (key, value) => {
     setProduct({ ...product, [key]: value });
   };
 
   const handleImageUpload = (event) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      setProduct({ ...product, image: selectedFile });
-    } else {
-      console.log("No file selected");
-    }
+    setProduct({ ...product, image: event.target.files[0] });
+  };
+
+  const handleImageUpload_sec = (e) => {
+    const files = e.target.files;
+    const imagesArray = Array.from(files);
+
+    const uploadPromises = imagesArray.map((image) => {
+      const formData = new FormData();
+      formData.append("file", image);
+      formData.append("upload_preset", "inventoryapp");
+
+      return fetch("https://api.cloudinary.com/v1_1/ddhayhptm/image/upload", {
+        method: "POST",
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((data) => data.url);
+    });
+
+    Promise.all(uploadPromises)
+      .then((imageUrls) => {
+        setProduct({ ...product, images: imageUrls });
+      })
+      .catch((error) => console.log(error));
   };
 
   const updateProduct = () => {
     const formData = new FormData();
-    formData.append("file", product.image);
+
+    if (product.image) {
+      formData.append("file", product.image);
+    }
+
     formData.append("upload_preset", "inventoryapp");
 
     fetch("https://api.cloudinary.com/v1_1/ddhayhptm/image/upload", {
@@ -46,53 +67,31 @@ export default function UpdateProduct({
     })
       .then((res) => res.json())
       .then((data) => {
-        const productDataWithImage = {
+        const mainImageURL = data.url;
+        const collectionImageURLs = product.images ? product.images : [];
+
+        const productDataWithImages = {
           ...product,
-          image: data.url,
+          image: mainImageURL,
+          images: collectionImageURLs,
         };
-
-        const collectionImagesInput = collectedImagesInputRef.current; // Access the input element using ref
-       
-        if (collectionImagesInput && collectionImagesInput.files.length > 0) {
-          const collectionImagesFormData = new FormData();
-          for (let i = 0; i < collectionImagesInput.files.length; i++) {
-            collectionImagesFormData.append("files", collectionImagesInput.files[i]);
-          }
-
-          fetch("http://localhost:4000/api/product/upload-collection-images", {
-            method: "POST",
-            body: collectionImagesFormData,
+          // console.log(productDataWithImages);
+        fetch("http://localhost:4000/api/product/update", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(productDataWithImages),
+        })
+          .then((result) => {
+            alert("Collection Updated");
+            window.location.reload()
+            setOpen(false);
+         
           })
-            .then((res) => res.json())
-            .then((collectionImagesData) => {
-              const productDataWithImages = {
-                ...productDataWithImage,
-                images: collectionImagesData,
-              };
-
-              sendUpdateRequest(productDataWithImages);
-            })
-            .catch((error) => console.log(error));
-        } else {
-          sendUpdateRequest(productDataWithImage);
-        }
+          .catch((err) => console.log(err));
       })
       .catch((error) => console.log(error));
-  };
-
-  const sendUpdateRequest = (productData) => {
-    fetch("http://localhost:4000/api/product/update", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(productData),
-    })
-      .then((result) => {
-        alert("Product Updated");
-        setOpen(false);
-      })
-      .catch((err) => console.log(err));
   };
 
   return (
@@ -137,7 +136,7 @@ export default function UpdateProduct({
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
-                      Update Collection
+                      Update Product
                     </Dialog.Title>
                     <div className="mt-2">
                       <form>
@@ -153,7 +152,7 @@ export default function UpdateProduct({
                               value={product.name}
                               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
                               className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                              placeholder="Collection Name"
+                              placeholder="Product Name"
                             />
                           </div>
 
@@ -172,20 +171,6 @@ export default function UpdateProduct({
                             />
                           </div>
 
-                          <div className="sm:col-span-2">
-                            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                              Description
-                            </label>
-                            <textarea
-                              id="description"
-                              name="description"
-                              value={product.description}
-                              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-                              rows="3"
-                              className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                              placeholder="Collection Description"
-                            ></textarea>
-                          </div>
 
                           <div className="sm:col-span-2">
                             <label htmlFor="client" className="block text-sm font-medium text-gray-700">
@@ -201,42 +186,7 @@ export default function UpdateProduct({
                               placeholder="Client"
                             />
                           </div>
-                          
-                          <div className="flex flex-wrap justify-center gap-4">
-                            {images.map((imageUrl, index) => (
-                              <div key={index}>
-                                <img
-                                  src={imageUrl}
-                                  alt={`Image ${index}`}
-                                  className="max-w-xs max-h-48 object-cover rounded-lg shadow-md"
-                                />
-                                <input
-                                  key={`input-${index}`}
-                                  type="hidden"
-                                  className="collections_imagess"
-                                  name="collections_imagess[]"
-                                  value={imageUrl}
-                                />
-                              </div>
-                            ))}
-                          </div>
 
-                          <div className="sm:col-span-2">
-                            <label htmlFor="collected_by" className="block text-sm font-medium text-gray-700">
-                              Collection Images
-                            </label>
-                            <input
-                            ref={collectedImagesInputRef}
-                              type="file"
-                              
-                              name="collected_imagess[]"
-                              id="collected_imagess"
-                                // Step 3: Attach the ref to the input element
-                              multiple
-                              className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                              placeholder="Collection Images"
-                            />
-                          </div>
                           <div className="sm:col-span-2">
                             <label htmlFor="collected_by" className="block text-sm font-medium text-gray-700">
                               Collected By
@@ -264,7 +214,62 @@ export default function UpdateProduct({
                               onChange={handleImageUpload}
                               className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                             />
-                            <input type="hidden" value={product.image} id="hiddenImageInput" />
+                         <input type="hidden" value={product.image} id="hiddenImageInput" />
+
+
+                          </div>
+                          <div className="sm:col-span-2">
+                            <label htmlFor="images" className="block text-sm font-medium text-gray-700">
+                            Collection Images
+                            </label>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              name="images"
+                              multiple
+                              id="images"
+                              onChange={handleImageUpload_sec}
+                              className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            />
+<div className="flex flex-wrap justify-center gap-4">
+                            {images.map((imageUrl, index) => (
+                              <div key={index}>
+                                <img
+                                  src={imageUrl}
+                                  alt={`Image ${index}`}
+                                  className="max-w-xs max-h-48 object-cover rounded-lg shadow-md"
+                                />
+                                <input
+                                  key={`input-${index}`}
+                                  type="hidden"
+                                  className="collections_imagess"
+                                  name="collections_imagess[]"
+                                  value={imageUrl}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                          <div className="sm:col-span-2">
+                            <label
+                              htmlFor="description"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            >
+                              Location
+                            </label>
+                            <textarea
+                              id="description"
+                              rows="5"
+                              name="description"
+                              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                              value={product.description}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  e.target.name,
+                                  e.target.value
+                                )
+                              }
+                            ></textarea>
+                          </div>
                           </div>
                         </div>
                       </form>
@@ -279,7 +284,7 @@ export default function UpdateProduct({
                   onClick={() => {
                     setOpen(false);
                     updateProduct();
-                  }}
+                  }} style={{color: "black" }}
                 >
                   Update
                 </button>

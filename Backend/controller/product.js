@@ -57,7 +57,9 @@ const deleteSelectedProduct = async (req, res) => {
 
 // Update Selected Product
 const updateSelectedProduct = async (req, res) => {
+  console.log(req.body+"     sdsadsadsasad");
   try {
+
     const updatedResult = await Product.findByIdAndUpdate(
       { _id: req.body.productID },
       {
@@ -71,7 +73,7 @@ const updateSelectedProduct = async (req, res) => {
       },
       { new: true }
     );
-    console.log(updatedResult);
+    //console.log(updatedResult);
     res.json(updatedResult);
   } catch (error) {
     console.log(error);

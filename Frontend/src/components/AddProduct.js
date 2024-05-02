@@ -59,7 +59,7 @@ export default function AddProduct({
     const formData = new FormData();
     formData.append("file", imageToUpload); // Use the image from the array or product.image
     formData.append("upload_preset", "inventoryapp");
-  
+    
     fetch("https://api.cloudinary.com/v1_1/ddhayhptm/image/upload", {
       method: "POST",
       body: formData,
@@ -71,7 +71,7 @@ export default function AddProduct({
           ...product,
           image: data.url,
         };
-  
+        console.log(productDataWithImage );
         // Now you can proceed to add the product with the image URL
         fetch("http://localhost:4000/api/product/add", {
           method: "POST",
@@ -258,7 +258,7 @@ export default function AddProduct({
                               htmlFor="additional_images"
                               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             >
-                              Additional Images
+                              Collection Images
                             </label>
                             <input
                               type="file"
@@ -311,6 +311,7 @@ export default function AddProduct({
                     </div>
                   </div>
                 </div>
+                
               </Dialog.Panel>
             </Transition.Child>
           </div>
