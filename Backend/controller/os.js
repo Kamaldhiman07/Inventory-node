@@ -1,14 +1,14 @@
-const OS = require("../models/os");
+const Make = require("../models/os");
 
 // Add Post
-const addOs = (req, res) => {
-    console.log("req: ", req.body);
-    const addOs = new OS({
+const addMake = (req, res) => {
+    console.log("req: ", req.body.osId);
+    const addMake = new Make({
       osId: req.body.osId,
       name: req.body.name,
     });
   
-    addOs
+    addMake
       .save()
       .then((result) => {
         res.status(200).send(result);
@@ -20,30 +20,38 @@ const addOs = (req, res) => {
   
 
 // Get All Products
-const getAllOs = async (req, res) => {
-    const findAllMakes = await OS.find({
-      osID: req.params.osId,
-    }).sort({ _id: -1 }); // -1 for descending;
-    res.json(findAllOs);
-  };
+// Get All Makes for a specific OS
+const getAllMakes = async (req, res) => {
+ 
+  try {
+      const osId = req.params.userId; // Assuming osId is passed as a parameter
+      const allMakes = await Make.find({ osId }).sort({ _id: -1 });
+      res.json(allMakes);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
   
 
 // Delete Selected Product
-const deleteSelectedOs = async (req, res) => {
-    const deleteOs = await OS.deleteOne(
+const deleteSelectedMake = async (req, res) => {
+    const deleteMake = await Make.deleteOne(
       { _id: req.params.id }
     );
     // Additional deletion logic for related data if necessary
     
-    res.json({ deleteOs });
+    res.json({ deleteMake });
   };
   
 
 // Update Selected Product
-const updateSelectedos = async (req, res) => {
+const updateSelectedMake = async (req, res) => {
+ 
     try {
-      const updatedResult = await OS.findByIdAndUpdate(
-        { _id: req.body.osID },
+      const updatedResult = await Make.findByIdAndUpdate(
+        { _id: req.body.osId },
         {
           name: req.body.name,
           // Additional fields to update if necessary
@@ -60,19 +68,19 @@ const updateSelectedos = async (req, res) => {
   
 
 // Search Products
-const searchOs = async (req, res) => {
+const searchMake = async (req, res) => {
     const searchTerm = req.query.searchTerm;
-    const os = await OS.find({
+    const makes = await Make.find({
       name: { $regex: searchTerm, $options: "i" },
     });
-    res.json(os);
+    res.json(makes);
   };
   
 
 module.exports = {
-  addOs,
-  getAllOs,
-  deleteSelectedOs,
-  updateSelectedos,
-  searchOs,
+  addMake,
+  getAllMakes,
+  deleteSelectedMake,
+  updateSelectedMake,
+  searchMake,
 };

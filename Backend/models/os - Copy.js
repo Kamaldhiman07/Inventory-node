@@ -1,7 +1,6 @@
-
 const mongoose = require("mongoose");
 
-const MakeSchema = new mongoose.Schema(
+const OsSchema = new mongoose.Schema(
   {
     userID: {
         type: mongoose.Schema.Types.ObjectId,
@@ -9,17 +8,17 @@ const MakeSchema = new mongoose.Schema(
       },
     osId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'makes',
-      required: true,
+      ref: 'os',
+      required: false,
     },
-    name: {
+    name: { // Corrected field name
       type: String,
-      required: true,
+      required: false,
     },
-    // Additional fields if necessary
   },
   { timestamps: true }
 );
 
-const Make = mongoose.model("os", MakeSchema);
-module.exports = Make;
+
+const Operatingsystem = mongoose.model("os", OsSchema);
+module.exports = Operatingsystem;

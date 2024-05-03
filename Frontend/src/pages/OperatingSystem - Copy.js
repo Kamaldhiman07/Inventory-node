@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import AddMake from "../components/AddOs"; // Correct import statement
-import UpdateMake from "../components/UpdateOS"; // Correct import statement
+import AddOs from "../components/AddOs"; // Correct import statement
+import UpdateOS from "../components/UpdateOS"; // Correct import statement
 import AuthContext from "../AuthContext";
 
 function Inventory() {
-  const [showMakeModal, setShowMakeModal] = useState(false);
+  const [showOSModal, setShowOSModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [updateMake, setUpdateMake] = useState([]);
-  const [makes, setAllMakes] = useState([]);
+  const [updateOS, setUpdateOS] = useState([]);
+  const [os, setAllos] = useState([]);
   const [searchTerm, setSearchTerm] = useState();
   const [updatePage, setUpdatePage] = useState(true);
   const [stores, setAllStores] = useState([]);
@@ -15,15 +15,15 @@ function Inventory() {
   const authContext = useContext(AuthContext);
 
   useEffect(() => {
-    fetchMakesData();
+    fetchosData();
   }, [updatePage]);
 
-  const fetchMakesData = () => {
+  const fetchosData = () => {
     fetch(`http://localhost:4000/api/os/get/${authContext.user}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setAllMakes(data);
+        setAllos(data);
       })
       .catch((err) => console.log(err));
   };
@@ -32,17 +32,17 @@ function Inventory() {
     fetch(`http://localhost:4000/api/os/search?searchTerm=${searchTerm}`)
       .then((response) => response.json())
       .then((data) => {
-        setAllMakes(data);
+        setAllos(data);
       })
       .catch((err) => console.log(err));
   };
 
-  const addMakeModalSetting = () => {
-    setShowMakeModal(!showMakeModal);
+  const addosModalSetting = () => {
+    setShowOSModal(!showOSModal);
   };
 
-  const updateMakeModalSetting = (selectedMakeData) => {
-    setUpdateMake(selectedMakeData);
+  const updateosModalSetting = (selectedMakeData) => {
+    setUpdateOS(selectedMakeData);
     setShowUpdateModal(!showUpdateModal);
   };
 
@@ -66,22 +66,22 @@ function Inventory() {
   return (
     <div className="col-span-12 lg:col-span-10 flex justify-center">
       <div className="flex flex-col gap-5 w-11/12">
-        {showMakeModal && (
-          <AddMake
-            addMakeModalSetting={addMakeModalSetting}
+        {showOSModal && (
+          <AddOs
+            addosModalSetting={addosModalSetting}
             handlePageUpdate={handlePageUpdate}
           />
         )}
         {showUpdateModal && (
-          <UpdateMake
-            updateMakeData={updateMake}
-            updateModalSetting={updateMakeModalSetting}
+          <UpdateOS
+            updateosData={updateOS}
+            updateModalSetting={updateosModalSetting}
           />
         )}
         <div className="overflow-x-auto rounded-lg border bg-white border-gray-200 ">
           <div className="flex justify-between pt-5 pb-3 px-3">
             <div className="flex gap-4 justify-center items-center ">
-              <span className="font-bold">Operating system</span>
+              <span className="font-bold">Operating System</span>
               <div className="flex justify-center items-center px-2 border-2 rounded-md ">
                 <img
                   alt="search-icon"
@@ -100,9 +100,9 @@ function Inventory() {
             <div className="flex gap-4">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 text-xs  rounded"
-                onClick={addMakeModalSetting}
+                onClick={addosModalSetting}
               >
-                Add Operating System
+                Add OS
               </button>
             </div>
           </div>
@@ -118,8 +118,7 @@ function Inventory() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {makes.map((element, index) => {
-               
+              {os.map((element, index) => {
                 return (
                   <tr key={element._id}>
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
@@ -128,7 +127,7 @@ function Inventory() {
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                       <span
                         className="text-green-700 cursor-pointer"
-                        onClick={() => updateMakeModalSetting(element)}
+                        onClick={() => updateosModalSetting(element)}
                       >
                         Edit
                       </span>

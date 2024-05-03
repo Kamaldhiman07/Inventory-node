@@ -1,19 +1,20 @@
 const express = require("express");
-const router = express.Router();
-const osController = require("../controller/os");
+const app = express();
+const make = require("../controller/os");
 
-// Add Operating System
-router.post("/add", osController.addOs); 
+// Add Product
+app.post("/add", make.addMake);
 
-// router.get("/get/:userId", osController.getAllOs);
+// Get All Products
+app.get("/get/:userId", make.getAllMakes);
 
-// // Delete Selected Operating System
-// router.get("/delete/:id", osController.deleteSelectedOs);
+// Delete Selected Product Item
+app.get("/delete/:id", make.deleteSelectedMake);
 
-// // Update Selected Operating System
-// router.post("/update", osController.updateSelectedOs);
+// Update Selected Product
+app.post("/update", make.updateSelectedMake);
 
-// // Search Operating Systems
-// router.get("/search", osController.searchOs);
+// Search Product
+app.get("/search", make.searchMake);
 
-module.exports = router;
+module.exports = app;

@@ -2,42 +2,35 @@ import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 
-export default function UpdateOs({
-  updateosData,
-  updateOsSetting,
+export default function UpdateMake({
+  updateMakeData,
+  updateModalSetting,
 }) {
-  const { _id, osName} = updateosData;
-  const [os, setOs] = useState({
+  const { _id, name } = updateMakeData;
+  const [make, setMake] = useState({
     osId: _id,
-    osName: osName,
+    name: name,
   });
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
 
   const handleInputChange = (key, value) => {
-    setOs(prevState => ({
-      ...prevState,
-      [key]: value
-    }));
+    setMake({ ...make, [key]: value });
   };
 
-  const updateOs = () => {
-    fetch("http://localhost:4000/api/model/update", {
+  const updateMake = () => {
+    fetch("http://localhost:4000/api/os/update", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(os),
+      body: JSON.stringify(make),
     })
       .then((result) => {
-        if (result.ok) {
-          alert("OS Updated");
-          setOpen(false);
-        } else {
-          throw new Error("Failed to update OS");
-        }
+        alert("Operating System Updated");
+        setOpen(false);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -87,25 +80,25 @@ export default function UpdateOs({
                       >
                         Update Operating System
                       </Dialog.Title>
-                      <form>
+                      <form action="#">
                         <div className="grid gap-4 mb-4 sm:grid-cols-2">
                           <div>
                             <label
-                              htmlFor="osName"
-                              className="block mb-2 text-sm font-medium text-gray-900"
+                              htmlFor="name"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             >
-                              OS Name
+                              Operating System
                             </label>
                             <input
                               type="text"
-                              name="osName"
-                              id="osName"
-                              value={os.osName}
+                              name="name"
+                              id="name"
+                              value={make.name}
                               onChange={(e) =>
                                 handleInputChange(e.target.name, e.target.value)
                               }
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                              placeholder="Enter model name"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                              placeholder="Enter Operating System name"
                             />
                           </div>
                         </div>
@@ -117,14 +110,14 @@ export default function UpdateOs({
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-                    onClick={updateOs}
+                    onClick={updateMake}
                   >
-                    Update Model
+                    Update Operating System
                   </button>
                   <button
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                    onClick={() => updateOsSetting()}
+                    onClick={() => updateModalSetting()}
                     ref={cancelButtonRef}
                   >
                     Cancel
