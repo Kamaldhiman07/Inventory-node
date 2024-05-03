@@ -2,43 +2,43 @@ import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 
-export default function UpdateModel({
-  updateModelData,
+export default function UpdateGrade({
+  updateGradeData,
   updateModalSetting,
 }) {
-  const { _id, modelName } = updateModelData;
-  const [model, setModel] = useState({
-    modelId: _id,
-    modelName: modelName,
+  const { _id, gradeName } = updateGradeData;
+  const [grade, setGrade] = useState({
+    gradeId: _id,
+    gradeName: gradeName,
   });
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
 
   const handleInputChange = (key, value) => {
-    setModel((prevState) => ({
+    setGrade((prevState) => ({
       ...prevState,
       [key]: value,
     }));
   };
 
-  const updateModel = () => {
-    fetch("http://localhost:4000/api/model/update", {
+  const updateGrade = () => {
+    fetch("http://localhost:4000/api/grade/update", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(model),
+      body: JSON.stringify(grade),
     })
       .then((response) => {
         if (response.ok) {
-          alert("Model Updated");
+          alert("Grade Updated");
           setOpen(false);
         } else {
-          throw new Error("Failed to update model");
+          throw new Error("Failed to update grade");
         }
       })
       .catch((error) => {
-        console.error("Error updating model:", error);
+        console.error("Error updating grade:", error);
       });
   };
 
@@ -83,19 +83,19 @@ export default function UpdateModel({
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <Dialog.Title className="text-lg font-medium text-gray-900">
-                      Update Model
+                      Update Grade
                     </Dialog.Title>
                     <div className="mt-2">
                       <input
                         type="text"
-                        name="modelName"
-                        id="modelName"
-                        value={model.modelName}
+                        name="gradeName"
+                        id="gradeName"
+                        value={grade.gradeName}
                         onChange={(e) =>
                           handleInputChange(e.target.name, e.target.value)
                         }
                         className="bg-gray-100 border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                        placeholder="Enter model name"
+                        placeholder="Enter grade name"
                       />
                     </div>
                   </div>
@@ -105,7 +105,7 @@ export default function UpdateModel({
                 <button
                   type="button"
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={updateModel}
+                  onClick={updateGrade}
                 >
                   Update
                 </button>

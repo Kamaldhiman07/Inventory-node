@@ -1,54 +1,53 @@
 import React, { useState, useEffect, useContext } from "react";
-import AddModel from "../components/AddModel";
-import UpdateModel from "../components/UpdateModel";
+import AddCurrentLocation from "../components/AddCurrentLocation";
+import UpdateCurrentLocation from "../components/UpdateCurrentLocation";
 import AuthContext from "../AuthContext";
 
 function Inventory() {
-  const [showModelModal, setShowModelModal] = useState(false);
+  const [showCurrentLocationModal, setShowCurrentLocationModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [updateModel, setUpdateModel] = useState([]);
-  const [models, setAllModels] = useState([]);
+  const [updateCurrentLocation, setUpdateCurrentLocation] = useState({});
+  const [currentLocations, setAllCurrentLocations] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [updatePage, setUpdatePage] = useState(true);
 
   const authContext = useContext(AuthContext);
 
   useEffect(() => {
-    fetchModelData();
+    fetchCurrentLocationData();
   }, [updatePage]);
 
-  const fetchModelData = () => {
-    fetch(`http://localhost:4000/api/model/get/${authContext.user}`)
+  const fetchCurrentLocationData = () => {
+    fetch(`http://localhost:4000/api/currentlocation/get/${authContext.user}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-        setAllModels(data);
+        setAllCurrentLocations(data);
       })
       .catch((err) => console.log(err));
   };
 
   const fetchSearchData = () => {
-    fetch(`http://localhost:4000/api/model/search?searchTerm=${searchTerm}`)
+    fetch(`http://localhost:4000/api/currentlocation/search?searchTerm=${searchTerm}`)
       .then((response) => response.json())
       .then((data) => {
-        setAllModels(data);
+        setAllCurrentLocations(data);
       })
       .catch((err) => console.log(err));
   };
 
-  const addModelModalSetting = () => {
-    setShowModelModal(!showModelModal);
+  const addCurrentLocationModalSetting = () => {
+    setShowCurrentLocationModal(!showCurrentLocationModal);
   };
 
-  const updateModelModalSetting = (selectedModelData) => {
-    setUpdateModel(selectedModelData);
+  const updateCurrentLocationModalSetting = (selectedCurrentLocationData) => {
+    setUpdateCurrentLocation(selectedCurrentLocationData);
     setShowUpdateModal(!showUpdateModal);
   };
 
-  const deleteItem = (id) => {
-    fetch(`http://localhost:4000/api/model/delete/${id}`)
+  const deleteCurrentLocation = (id) => {
+    fetch(`http://localhost:4000/api/currentlocation/delete/${id}`)
       .then((response) => response.json())
-      .then((data) => {
+      .then(() => {
         setUpdatePage(!updatePage);
       })
       .catch((err) => console.log(err));
@@ -66,22 +65,22 @@ function Inventory() {
   return (
     <div className="col-span-12 lg:col-span-10 flex justify-center">
       <div className="flex flex-col gap-5 w-11/12">
-        {showModelModal && (
-          <AddModel
-            addModelModalSetting={addModelModalSetting}
+        {showCurrentLocationModal && (
+          <AddCurrentLocation
+            addCurrentLocationModalSetting={addCurrentLocationModalSetting}
             handlePageUpdate={handlePageUpdate}
           />
         )}
         {showUpdateModal && (
-          <UpdateModel
-            updateModelData={updateModel}
-            updateModalSetting={updateModelModalSetting}
+          <UpdateCurrentLocation
+            updateCurrentLocationData={updateCurrentLocation}
+            updateModalSetting={updateCurrentLocationModalSetting}
           />
         )}
         <div className="overflow-x-auto rounded-lg border bg-white border-gray-200">
           <div className="flex justify-between pt-5 pb-3 px-3">
             <div className="flex gap-4 justify-center items-center ">
-              <span className="font-bold">Model</span>
+              <span className="font-bold">Current Location</span>
               <div className="flex justify-center items-center px-2 border-2 rounded-md ">
                 <img
                   alt="search-icon"
@@ -100,9 +99,9 @@ function Inventory() {
             <div className="flex gap-4">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 text-xs  rounded"
-                onClick={addModelModalSetting}
+                onClick={addCurrentLocationModalSetting}
               >
-                Add Model
+                Add Current Location
               </button>
             </div>
           </div>
@@ -110,7 +109,7 @@ function Inventory() {
             <thead>
               <tr>
                 <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
-                  Model
+                  Current Location
                 </th>
                 <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
                   More
@@ -118,29 +117,27 @@ function Inventory() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {models.map((element, index) => {
-                return (
-                  <tr key={element._id}>
-                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      {element.modelName}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      <span
-                        className="text-green-700 cursor-pointer"
-                        onClick={() => updateModelModalSetting(element)}
-                      >
-                        Edit
-                      </span>
-                      <span
-                        className="text-red-600 px-2 cursor-pointer"
-                        onClick={() => deleteItem(element._id)}
-                      >
-                        Delete
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })}
+              {currentLocations.map((element) => (
+                <tr key={element._id}>
+                  <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                    {element.currentLocationName}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                    <span
+                      className="text-green-700 cursor-pointer"
+                      onClick={() => updateCurrentLocationModalSetting(element)}
+                    >
+                      Edit
+                    </span>
+                    <span
+                      className="text-red-600 px-2 cursor-pointer"
+                      onClick={() => deleteCurrentLocation(element._id)}
+                    >
+                      Delete
+                    </span>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

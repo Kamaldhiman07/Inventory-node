@@ -1,44 +1,43 @@
-import { Fragment, useRef, useState } from "react";
+import React, { Fragment, useContext, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
+import AuthContext from "../AuthContext";
 
-export default function UpdateModel({
-  updateModelData,
-  updateModalSetting,
-}) {
-  const { _id, modelName } = updateModelData;
-  const [model, setModel] = useState({
-    modelId: _id,
-    modelName: modelName,
+export default function AddGrade({ addGradeModalSetting, handlePageUpdate }) {
+  const authContext = useContext(AuthContext);
+  const [grade, setGrade] = useState({
+    gradeId: authContext.user,
+    gradeName: "",
   });
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
 
   const handleInputChange = (key, value) => {
-    setModel((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }));
+    setGrade({ ...grade, [key]: value });
   };
 
-  const updateModel = () => {
-    fetch("http://localhost:4000/api/model/update", {
+  const addGrade = () => {
+    fetch("http://localhost:4000/api/grade/add", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(model),
+      body: JSON.stringify(grade),
     })
       .then((response) => {
-        if (response.ok) {
-          alert("Model Updated");
-          setOpen(false);
-        } else {
-          throw new Error("Failed to update model");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
         }
+        return response.json();
+      })
+      .then((data) => {
+        alert("Grade Added");
+        handlePageUpdate();
+        addGradeModalSetting();
+        setGrade({ ...grade, gradeName: "" }); // Reset the gradeName
       })
       .catch((error) => {
-        console.error("Error updating model:", error);
+        console.error("Error adding grade:", error);
       });
   };
 
@@ -48,7 +47,7 @@ export default function UpdateModel({
         as="div"
         className="fixed inset-0 z-10 overflow-y-auto"
         initialFocus={cancelButtonRef}
-        onClose={() => setOpen(false)}
+        onClose={setOpen}
       >
         <Transition.Child
           as={Fragment}
@@ -83,19 +82,19 @@ export default function UpdateModel({
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <Dialog.Title className="text-lg font-medium text-gray-900">
-                      Update Model
+                      Add Grade
                     </Dialog.Title>
                     <div className="mt-2">
                       <input
                         type="text"
-                        name="modelName"
-                        id="modelName"
-                        value={model.modelName}
+                        name="gradeName"
+                        id="gradeName"
+                        value={grade.gradeName}
                         onChange={(e) =>
                           handleInputChange(e.target.name, e.target.value)
                         }
                         className="bg-gray-100 border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                        placeholder="Enter model name"
+                        placeholder="Enter grade name"
                       />
                     </div>
                   </div>
@@ -105,15 +104,16 @@ export default function UpdateModel({
                 <button
                   type="button"
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={updateModel}
+                  onClick={addGrade}
                 >
-                  Update
+                  Add
                 </button>
                 <button
                   type="button"
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
                   onClick={() => {
-                    updateModalSetting();
+                    addGradeModalSetting();
+                    setGrade({ ...grade, gradeName: "" }); // Reset the gradeName on cancel
                   }}
                   ref={cancelButtonRef}
                 >

@@ -1,52 +1,52 @@
 import React, { useState, useEffect, useContext } from "react";
-import AddModel from "../components/AddModel";
-import UpdateModel from "../components/UpdateModel";
+import AddGrade from "../components/AddGrade";
+import UpdateGrade from "../components/UpdateGrade";
 import AuthContext from "../AuthContext";
 
 function Inventory() {
-  const [showModelModal, setShowModelModal] = useState(false);
+  const [showGradeModal, setShowGradeModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [updateModel, setUpdateModel] = useState([]);
-  const [models, setAllModels] = useState([]);
+  const [updateGrade, setUpdateGrade] = useState([]);
+  const [grades, setAllGrades] = useState([]); // Changed from 'models' to 'grades'
   const [searchTerm, setSearchTerm] = useState("");
   const [updatePage, setUpdatePage] = useState(true);
 
   const authContext = useContext(AuthContext);
 
   useEffect(() => {
-    fetchModelData();
+    fetchGradeData();
   }, [updatePage]);
 
-  const fetchModelData = () => {
-    fetch(`http://localhost:4000/api/model/get/${authContext.user}`)
+  const fetchGradeData = () => {
+    fetch(`http://localhost:4000/api/grade/get/${authContext.user}`) // Changed from 'model' to 'grade'
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        setAllModels(data);
+        setAllGrades(data); // Changed from 'models' to 'grades'
       })
       .catch((err) => console.log(err));
   };
 
   const fetchSearchData = () => {
-    fetch(`http://localhost:4000/api/model/search?searchTerm=${searchTerm}`)
+    fetch(`http://localhost:4000/api/grade/search?searchTerm=${searchTerm}`) // Changed from 'model' to 'grade'
       .then((response) => response.json())
       .then((data) => {
-        setAllModels(data);
+        setAllGrades(data); // Changed from 'models' to 'grades'
       })
       .catch((err) => console.log(err));
   };
 
-  const addModelModalSetting = () => {
-    setShowModelModal(!showModelModal);
+  const addGradeModalSetting = () => {
+    setShowGradeModal(!showGradeModal);
   };
 
-  const updateModelModalSetting = (selectedModelData) => {
-    setUpdateModel(selectedModelData);
+  const updateGradeModalSetting = (selectedGradeData) => {
+    setUpdateGrade(selectedGradeData);
     setShowUpdateModal(!showUpdateModal);
   };
 
   const deleteItem = (id) => {
-    fetch(`http://localhost:4000/api/model/delete/${id}`)
+    fetch(`http://localhost:4000/api/grade/delete/${id}`) // Changed from 'model' to 'grade'
       .then((response) => response.json())
       .then((data) => {
         setUpdatePage(!updatePage);
@@ -66,22 +66,22 @@ function Inventory() {
   return (
     <div className="col-span-12 lg:col-span-10 flex justify-center">
       <div className="flex flex-col gap-5 w-11/12">
-        {showModelModal && (
-          <AddModel
-            addModelModalSetting={addModelModalSetting}
+        {showGradeModal && (
+          <AddGrade
+            addGradeModalSetting={addGradeModalSetting}
             handlePageUpdate={handlePageUpdate}
           />
         )}
         {showUpdateModal && (
-          <UpdateModel
-            updateModelData={updateModel}
-            updateModalSetting={updateModelModalSetting}
+          <UpdateGrade
+            updateGradeData={updateGrade}
+            updateModalSetting={updateGradeModalSetting}
           />
         )}
         <div className="overflow-x-auto rounded-lg border bg-white border-gray-200">
           <div className="flex justify-between pt-5 pb-3 px-3">
             <div className="flex gap-4 justify-center items-center ">
-              <span className="font-bold">Model</span>
+              <span className="font-bold">Grade</span> {/* Changed from 'Model' to 'Grade' */}
               <div className="flex justify-center items-center px-2 border-2 rounded-md ">
                 <img
                   alt="search-icon"
@@ -100,9 +100,9 @@ function Inventory() {
             <div className="flex gap-4">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 text-xs  rounded"
-                onClick={addModelModalSetting}
+                onClick={addGradeModalSetting}
               >
-                Add Model
+                Add Grade
               </button>
             </div>
           </div>
@@ -110,7 +110,7 @@ function Inventory() {
             <thead>
               <tr>
                 <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
-                  Model
+                  Grade {/* Changed from 'Model' to 'Grade' */}
                 </th>
                 <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
                   More
@@ -118,16 +118,16 @@ function Inventory() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {models.map((element, index) => {
+              {grades.map((element, index) => {
                 return (
                   <tr key={element._id}>
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      {element.modelName}
+                      {element.gradeName} {/* Changed from 'modelName' to 'gradeName' */}
                     </td>
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                       <span
                         className="text-green-700 cursor-pointer"
-                        onClick={() => updateModelModalSetting(element)}
+                        onClick={() => updateGradeModalSetting(element)}
                       >
                         Edit
                       </span>

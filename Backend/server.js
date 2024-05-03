@@ -13,6 +13,9 @@ const makeRoute = require("./router/make");
 const recoveredmaterialRoute = require("./router/recoveredmaterial");
 const unrecoveredmaterialRoute = require("./router/unrecoveredmaterial");
 const modelRoute = require("./router/model");
+const gradeRoute = require("./router/grade");
+const conditionRoute = require("./router/condition");
+const currentLocation = require("./router/currentLocation");
 
 const app = express();
 const PORT = 4000;
@@ -35,6 +38,9 @@ app.use("/api/make", makeRoute);
 app.use("/api/recoveredmaterial", recoveredmaterialRoute);
 app.use("/api/unrecoveredmaterial", unrecoveredmaterialRoute);
 app.use("/api/model", modelRoute);
+app.use("/api/grade", gradeRoute);
+app.use("/api/condition", conditionRoute);
+app.use("/api/currentlocation", currentLocation);
 
 // app.use("/api/client", clientRoute);
 

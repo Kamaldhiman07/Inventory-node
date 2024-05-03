@@ -22,7 +22,7 @@ const addModel = (req, res) => {
 // Get All Models
 const getAllModels = async (req, res) => {
     const allModels = await Model.find({
-      userId: req.params.userId,
+      modelID: req.params.modelId,
     }).sort({ _id: -1 }); // -1 for descending;
     res.json(allModels);
 };
