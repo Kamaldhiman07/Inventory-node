@@ -3,28 +3,33 @@ const Purchase = require("../models/purchase");
 const Sales = require("../models/sales");
 
 // Add Post
-const addProduct = (req, res) => {
+const addProduct = async (req, res) => {
   console.log("req: ", req.body);
  
-  const addProduct = new Product({
+  // Extract image URL or URLs from the request body
+  const image = req.body.image;
+  const images = req.body.images || [];
+
+  const newProduct = new Product({
     userID: req.body.userId,
     name: req.body.name,
     manufacturer: req.body.manufacturer,
     client: req.body.client,
     collected_by: req.body.collected_by,
-    image:req.body.image,
+    image: image, // Assign the single image URL to the 'image' field
+    images: images, // Assign the array of image URLs to the 'images' field
     stock: 0,
     description: req.body.description,
   });
 
-  addProduct
-    .save()
-    .then((result) => {
-      res.status(200).send(result);
-    })
-    .catch((err) => {
-      res.status(402).send(err);
-    });
+  try {
+    // Save the new product to the database
+    const result = await newProduct.save();
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Error adding product:', error);
+    res.status(402).json({ error: 'Error adding product' });
+  }
 };
 
 // Get All Products
@@ -52,7 +57,9 @@ const deleteSelectedProduct = async (req, res) => {
 
 // Update Selected Product
 const updateSelectedProduct = async (req, res) => {
+  console.log(req.body+"     sdsadsadsasad");
   try {
+
     const updatedResult = await Product.findByIdAndUpdate(
       { _id: req.body.productID },
       {
@@ -61,11 +68,12 @@ const updateSelectedProduct = async (req, res) => {
         description: req.body.description,
         client: req.body.client,
         image:req.body.image,
+        images:req.body.images,
         collected_by: req.body.collected_by,
       },
       { new: true }
     );
-    console.log(updatedResult);
+    //console.log(updatedResult);
     res.json(updatedResult);
   } catch (error) {
     console.log(error);

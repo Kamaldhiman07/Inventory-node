@@ -1,4 +1,4 @@
-import { Fragment, useContext, useRef, useState } from "react";
+import React, { Fragment, useContext, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import AuthContext from "../AuthContext";
@@ -13,11 +13,11 @@ export default function AddProduct({
     name: "",
     manufacturer: "",
     description: "",
-    image: "",
+    image: null, // Change image to null
+    images: [], // Add a new field for multiple images
     client: "",
     collected_by: "",
   });
-  console.log("----", product);
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
 
@@ -26,48 +26,40 @@ export default function AddProduct({
   };
 
   const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    setProduct({ ...product, image: file });
+    const files = e.target.files;
+    const imagesArray = Array.from(files); // Convert FileList to array
+
+    // Map over the array of images and upload each one to Cloudinary
+    const uploadPromises = imagesArray.map((image) => {
+      const formData = new FormData();
+      formData.append("file", image);
+      formData.append("upload_preset", "inventoryapp");
+
+      // Return a promise for each image upload
+      return fetch("https://api.cloudinary.com/v1_1/ddhayhptm/image/upload", {
+        method: "POST",
+        body: formData,
+      })
+      .then((res) => res.json())
+      .then((data) => data.url); // Extract the URL from the Cloudinary response
+    });
+
+    // Once all images are uploaded, update the product data with the image URLs
+    Promise.all(uploadPromises)
+      .then((imageUrls) => {
+        setProduct({ ...product, images: imageUrls });
+      })
+      .catch((error) => console.log(error));
   };
 
-  // const addProduct = () => {
-  //   // Create a FormData object to append the image file
-  //   const formData = new FormData();
-  //   formData.append("file", product.image);
-  //   formData.append("upload_preset", "inventoryapp");
-
-  //   // Upload image to Cloudinary
-  //   fetch("https://api.cloudinary.com/v1_1/ddhayhptm/image/upload", {
-  //     method: "POST",
-  //     body: formData,
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       // Update product data with the image URL from Cloudinary
-  //       setProduct({ ...product, image: data.url });
-
-  //       // Now you can proceed to add the product with the image URL
-  //       fetch("http://localhost:4000/api/product/add", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-type": "application/json",
-  //         },
-  //         body: JSON.stringify(product),
-  //       })
-  //         .then((result) => {
-  //           alert("Product ADDED");
-  //           handlePageUpdate();
-  //           addProductModalSetting();
-  //         })
-  //         .catch((err) => console.log(err));
-  //     })
-  //     .catch((error) => console.log(error));
-  // };
   const addProduct = () => {
-    const formData = new FormData();
-    formData.append("file", product.image);
-    formData.append("upload_preset", "inventoryapp");
+    // If product.images array is empty, use product.image
+    const imageToUpload = product.images.length > 0 ? product.images[0] : product.image;
   
+    const formData = new FormData();
+    formData.append("file", imageToUpload); // Use the image from the array or product.image
+    formData.append("upload_preset", "inventoryapp");
+    
     fetch("https://api.cloudinary.com/v1_1/ddhayhptm/image/upload", {
       method: "POST",
       body: formData,
@@ -79,7 +71,7 @@ export default function AddProduct({
           ...product,
           image: data.url,
         };
-  
+        console.log(productDataWithImage );
         // Now you can proceed to add the product with the image URL
         fetch("http://localhost:4000/api/product/add", {
           method: "POST",
@@ -98,8 +90,8 @@ export default function AddProduct({
       .catch((error) => console.log(error));
   };
   
+
   return (
-    // Modal
     <Transition.Root show={open} as={Fragment}>
       <Dialog
         as="div"
@@ -146,7 +138,7 @@ export default function AddProduct({
                       >
                         Add Collections
                       </Dialog.Title>
-                      <form action="#" >
+                      <form action="#">
                         <div className="grid gap-4 mb-4 sm:grid-cols-2">
                           <div>
                             <label
@@ -246,6 +238,36 @@ export default function AddProduct({
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                             />
                           </div>
+                          {/* <div>
+                            <label
+                              htmlFor="collected_gallery"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            >
+                              Collection Gallery
+                            </label>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              name="collected_gallery"
+                              onChange={handleImageUpload}
+                              multiple
+                            />
+                          </div> */}
+                          <div>
+                            <label
+                              htmlFor="additional_images"
+                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            >
+                              Collection Images
+                            </label>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              name="additional_images"
+                              onChange={handleImageUpload}
+                              multiple
+                            />
+                          </div>
                           <div className="sm:col-span-2">
                             <label
                               htmlFor="description"
@@ -274,7 +296,7 @@ export default function AddProduct({
                             className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
                             onClick={addProduct}
                           >
-                            Add Product
+                            Add Collection
                           </button>
                           <button
                             type="button"
@@ -289,23 +311,7 @@ export default function AddProduct({
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                  <button
-                    type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-                    onClick={addProduct}
-                  >
-                    Add Collection
-                  </button>
-                  <button
-                    type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                    onClick={() => addProductModalSetting()}
-                    ref={cancelButtonRef}
-                  >
-                    Cancel
-                  </button>
-                </div>
+                
               </Dialog.Panel>
             </Transition.Child>
           </div>

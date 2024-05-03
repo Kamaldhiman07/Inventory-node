@@ -6,93 +6,143 @@ export default function UpdateProduct({
   updateProductData,
   updateModalSetting,
 }) {
-  const { _id, name, manufacturer, description,client,collected_by } = updateProductData;
+  const { _id, name, manufacturer, description, client, collected_by, image, images } = updateProductData;
   const [product, setProduct] = useState({
     productID: _id,
     name: name,
     manufacturer: manufacturer,
     description: description,
     client: client,
+    image: image,
     collected_by: collected_by,
+    images: images,
   });
   const [open, setOpen] = useState(true);
   const cancelButtonRef = useRef(null);
 
   const handleInputChange = (key, value) => {
-    console.log(key);
     setProduct({ ...product, [key]: value });
   };
 
-  const updateProduct = () => {
-    fetch("http://localhost:4000/api/product/update", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(product),
-    })
-      .then((result) => {
-        alert("Product Updated");
-        setOpen(false);
+  const handleImageUpload = (event) => {
+    setProduct({ ...product, image: event.target.files[0] });
+  };
+
+  const handleImageUpload_sec = (e) => {
+    const files = e.target.files;
+    const imagesArray = Array.from(files);
+
+    const uploadPromises = imagesArray.map((image) => {
+      const formData = new FormData();
+      formData.append("file", image);
+      formData.append("upload_preset", "inventoryapp");
+
+      return fetch("https://api.cloudinary.com/v1_1/ddhayhptm/image/upload", {
+        method: "POST",
+        body: formData,
       })
-      .catch((err) => console.log(err));
+        .then((res) => res.json())
+        .then((data) => data.url);
+    });
+
+    Promise.all(uploadPromises)
+      .then((imageUrls) => {
+        setProduct({ ...product, images: imageUrls });
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const updateProduct = () => {
+    const formData = new FormData();
+
+    if (product.image) {
+      formData.append("file", product.image);
+    }
+
+    formData.append("upload_preset", "inventoryapp");
+
+    fetch("https://api.cloudinary.com/v1_1/ddhayhptm/image/upload", {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const mainImageURL = data.url;
+        const collectionImageURLs = product.images ? product.images : [];
+
+        const productDataWithImages = {
+          ...product,
+          image: mainImageURL,
+          images: collectionImageURLs,
+        };
+          // console.log(productDataWithImages);
+        fetch("http://localhost:4000/api/product/update", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(productDataWithImages),
+        })
+          .then((result) => {
+            alert("Collection Updated");
+            window.location.reload()
+            setOpen(false);
+         
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
-    // Modal
     <Transition.Root show={open} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-10"
-        initialFocus={cancelButtonRef}
+        className="fixed z-10 inset-0 overflow-y-auto"
         onClose={setOpen}
+        initialFocus={cancelButtonRef}
       >
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-        </Transition.Child>
+        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+          </Transition.Child>
 
-        <div className="fixed inset-0 z-10 overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              enterTo="opacity-100 translate-y-0 sm:scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
-                    <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
-                      <PlusIcon
-                        className="h-6 w-6 text-blue-400"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left ">
-                      <Dialog.Title
-                        as="h3"
-                        className="text-lg font-semibold leading-6 text-gray-900 "
-                      >
-                        Update Product
-                      </Dialog.Title>
-                      <form action="#">
-                        <div className="grid gap-4 mb-4 sm:grid-cols-2">
-                          <div>
-                            <label
-                              htmlFor="name"
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            >
+          <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
+            &#8203;
+          </span>
+
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            enterTo="opacity-100 translate-y-0 sm:scale-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+            leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          >
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div className="sm:flex sm:items-start">
+                  <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                    <PlusIcon className="h-6 w-6 text-blue-600" aria-hidden="true" />
+                  </div>
+                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                    <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
+                      Update Product
+                    </Dialog.Title>
+                    <div className="mt-2">
+                      <form>
+                        <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
+                          <div className="sm:col-span-2">
+                            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                               Name
                             </label>
                             <input
@@ -100,18 +150,14 @@ export default function UpdateProduct({
                               name="name"
                               id="name"
                               value={product.name}
-                              onChange={(e) =>
-                                handleInputChange(e.target.name, e.target.value)
-                              }
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                              placeholder="Ex. Apple iMac 27&ldquo;"
+                              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+                              className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                              placeholder="Product Name"
                             />
                           </div>
-                          <div>
-                            <label
-                              htmlFor="manufacturer"
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            >
+
+                          <div className="sm:col-span-2">
+                            <label htmlFor="manufacturer" className="block text-sm font-medium text-gray-700">
                               Manufacturer
                             </label>
                             <input
@@ -119,132 +165,140 @@ export default function UpdateProduct({
                               name="manufacturer"
                               id="manufacturer"
                               value={product.manufacturer}
-                              onChange={(e) =>
-                                handleInputChange(e.target.name, e.target.value)
-                              }
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                              placeholder="Ex. Apple"
+                              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+                              className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                              placeholder="Manufacturer"
                             />
                           </div>
 
-                          <div>
-                            <label
-                              htmlFor="client"
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            >
-                              Manufacturer
+
+                          <div className="sm:col-span-2">
+                            <label htmlFor="client" className="block text-sm font-medium text-gray-700">
+                              Client
                             </label>
                             <input
                               type="text"
                               name="client"
                               id="client"
                               value={product.client}
-                              onChange={(e) =>
-                                handleInputChange(e.target.name, e.target.value)
-                              }
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                              placeholder="Ex. Apple"
+                              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+                              className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                              placeholder="Client"
                             />
                           </div>
-                          <div>
-                            <label
-                              htmlFor="collected_by"
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            >
-                              Collected by
+
+                          <div className="sm:col-span-2">
+                            <label htmlFor="collected_by" className="block text-sm font-medium text-gray-700">
+                              Collected By
                             </label>
                             <input
                               type="text"
                               name="collected_by"
                               id="collected_by"
                               value={product.collected_by}
-                              onChange={(e) =>
-                                handleInputChange(e.target.name, e.target.value)
-                              }
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                              placeholder="Ex. Apple"
+                              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
+                              className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                              placeholder="Collected By"
                             />
                           </div>
 
+                          <div className="sm:col-span-2">
+                            <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+                              Image
+                            </label>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              name="image"
+                              id="image"
+                              onChange={handleImageUpload}
+                              className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            />
+                         <input type="hidden" value={product.image} id="hiddenImageInput" />
 
 
-
+                          </div>
+                          <div className="sm:col-span-2">
+                            <label htmlFor="images" className="block text-sm font-medium text-gray-700">
+                            Collection Images
+                            </label>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              name="images"
+                              multiple
+                              id="images"
+                              onChange={handleImageUpload_sec}
+                              className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            />
+<div className="flex flex-wrap justify-center gap-4">
+                            {images.map((imageUrl, index) => (
+                              <div key={index}>
+                                <img
+                                  src={imageUrl}
+                                  alt={`Image ${index}`}
+                                  className="max-w-xs max-h-48 object-cover rounded-lg shadow-md"
+                                />
+                                <input
+                                  key={`input-${index}`}
+                                  type="hidden"
+                                  className="collections_imagess"
+                                  name="collections_imagess[]"
+                                  value={imageUrl}
+                                />
+                              </div>
+                            ))}
+                          </div>
                           <div className="sm:col-span-2">
                             <label
                               htmlFor="description"
                               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             >
-                              Description
+                              Location
                             </label>
                             <textarea
                               id="description"
                               rows="5"
                               name="description"
                               className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                              placeholder="Write a description..."
                               value={product.description}
                               onChange={(e) =>
-                                handleInputChange(e.target.name, e.target.value)
+                                handleInputChange(
+                                  e.target.name,
+                                  e.target.value
+                                )
                               }
-                            >
-                              Standard glass, 3.8GHz 8-core 10th-generation
-                              Intel Core i7 processor, Turbo Boost up to 5.0GHz,
-                              16GB 2666MHz DDR4 memory, Radeon Pro 5500 XT with
-                              8GB of GDDR6 memory, 256GB SSD storage, Gigabit
-                              Ethernet, Magic Mouse 2, Magic Keyboard - US
-                            </textarea>
+                            ></textarea>
                           </div>
-                        </div>
-                        <div className="flex items-center space-x-4">
-                          {/* <button
-                            type="submit"
-                            className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                          >
-                            Update product
-                          </button> */}
-                          {/* <button
-                            type="button"
-                            className="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
-                          >
-                            <svg
-                              className="mr-1 -ml-1 w-5 h-5"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                clip-rule="evenodd"
-                              ></path>
-                            </svg>
-                            Delete
-                          </button> */}
+                          </div>
                         </div>
                       </form>
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                  <button
-                    type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-                    onClick={updateProduct}
-                  >
-                    Update Product
-                  </button>
-                  <button
-                    type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                    onClick={() => updateModalSetting()}
-                    ref={cancelButtonRef}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
+              </div>
+              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button
+                  type="button"
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary-600 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:ml-3 sm:w-auto sm:text-sm"
+                  onClick={() => {
+                    setOpen(false);
+                    updateProduct();
+                  }} style={{color: "black" }}
+                >
+                  Update
+                </button>
+                <button
+                  type="button"
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                  onClick={() => setOpen(false)}
+                  ref={cancelButtonRef}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </Transition.Child>
         </div>
       </Dialog>
     </Transition.Root>
