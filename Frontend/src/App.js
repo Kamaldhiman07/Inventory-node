@@ -19,7 +19,13 @@ import Make from "./pages/Make";
 import RecoveredMaterial from "./pages/RecoveredMaterial";
 import UnrecoveredMaterial from "./pages/UnrecoveredMaterial";
 import Model from "./pages/Model";
+<<<<<<< HEAD
+import Grade from "./pages/Grade";
+import Condition from "./pages/Condition";
+import CurrentLocation from "./pages/CurrentLocation";
+=======
 import OperatingSystem from "./pages/OperatingSystem";
+>>>>>>> adadf325804e346de0edea52d090c17b6e170017
 
 const App = () => {
   const [user, setUser] = useState("");
@@ -90,8 +96,14 @@ const App = () => {
             <Route path="/recovered-material" element={<RecoveredMaterial />} />
             <Route path="/unrecovered-material" element={<UnrecoveredMaterial />} />
             <Route path="/model" element={<Model />} />
+<<<<<<< HEAD
+            <Route path="/grade" element={<Grade />} />
+            <Route path="/condition" element={<Condition />} />
+            <Route path="/current-location" element={<CurrentLocation />} />
+=======
             <Route path="/operatingsystem" element={<OperatingSystem />} />
             
+>>>>>>> adadf325804e346de0edea52d090c17b6e170017
           </Route>
           <Route path="*" element={<NoPageFound />} />
         </Routes>
